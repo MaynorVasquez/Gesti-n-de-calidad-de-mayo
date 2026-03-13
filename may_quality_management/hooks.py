@@ -1,9 +1,11 @@
 app_name = "may_quality_management"
-app_title = "may_quality_management"
+app_title = "Quality Management"
 app_publisher = "Maynor Vasquez"
 app_description = "may_quality_management"
 app_email = "vasquez158@gmail.com"
 app_license = "gpl-3.0"
+app_icon = "octicon octicon-checklist"
+app_color = "blue"
 
 # Apps
 # ------------------

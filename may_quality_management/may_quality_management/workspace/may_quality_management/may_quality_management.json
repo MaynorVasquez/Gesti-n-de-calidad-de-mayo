@@ -1,0 +1,134 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"VANGkmNrlP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">May Quality Management</span>\",\"col\":12}},{\"id\":\"QMWRrf1HIa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis de Tendencia\",\"col\":3}},{\"id\":\"qDkxkSOhUD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis De Tendencia De Control De Calidad\",\"col\":3}},{\"id\":\"LrDVGqE5Fg\",\"type\":\"card\",\"data\":{\"card_name\":\"Control de calidad del producto\",\"col\":12}},{\"id\":\"Mp6aqrhjoj\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"7W7p4fZoOX\",\"type\":\"card\",\"data\":{\"card_name\":\"Plantilla de formatos\",\"col\":4}},{\"id\":\"x_061FWARF\",\"type\":\"card\",\"data\":{\"card_name\":\"Configuraci\u00f3n\",\"col\":4}}]",
+ "creation": "2026-02-26 17:16:00.933289",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "quality",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "May Quality Management",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuraci\u00f3n",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Categorias de control de calidad",
+   "link_count": 0,
+   "link_to": "QC Categoria",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Parametros de control de calidad",
+   "link_count": 0,
+   "link_to": "QC Parametro",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Plantilla de formatos",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Plantilla de producto",
+   "link_count": 0,
+   "link_to": "QC Template",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Control de calidad del producto",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Ingresos de control de calidad del producto",
+   "link_count": 0,
+   "link_to": "QC Producto",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Ingreso de muestras de control de calidad",
+   "link_count": 0,
+   "link_to": "QC Producto Muestra",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Ingreso de paros de producti\u00f3n",
+   "link_count": 0,
+   "link_to": "QC Paros de Produccion",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-03-10 13:24:14.805818",
+ "modified_by": "Administrator",
+ "module": "may_quality_management",
+ "name": "May Quality Management",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 39.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "An\u00e1lisis de Tendencia",
+   "link_to": "An\u00e1lisis de Tendencia por Producto",
+   "report_ref_doctype": "QC Producto Muestra",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "An\u00e1lisis De Tendencia De Control De Calidad",
+   "link_to": "An\u00e1lisis de Tendencia de Control de Calidad",
+   "report_ref_doctype": "QC Producto Muestra",
+   "type": "Report"
+  }
+ ],
+ "title": "May Quality Management"
+}

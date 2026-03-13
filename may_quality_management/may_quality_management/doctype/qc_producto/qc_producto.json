@@ -1,0 +1,200 @@
+{
+ "actions": [],
+ "autoname": "Format: FORM-CCAL-057-{######}",
+ "creation": "2026-02-18 16:47:13.533503",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "contro_de_calidad_del_producto_tab",
+  "head_section",
+  "qc_template",
+  "column_break_rhsl",
+  "itemname",
+  "section_break_taoo",
+  "vida_util",
+  "batchnum",
+  "column_break_pxzf",
+  "tiempo",
+  "column_break_hjju",
+  "hora",
+  "docdate",
+  "docduedate",
+  "section_break_fowd",
+  "paquetes_producidos",
+  "column_break_vnra",
+  "paquetes_rechazados",
+  "section_break_ujgs",
+  "comentarios",
+  "documentos_base_tab",
+  "documento_base",
+  "connections_tab",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "QC Producto",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "head_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "qc_template",
+   "fieldtype": "Link",
+   "label": "C\u00f3digo del producto",
+   "options": "QC Template"
+  },
+  {
+   "fieldname": "batchnum",
+   "fieldtype": "Data",
+   "label": "Lote"
+  },
+  {
+   "default": "Now",
+   "fieldname": "docdate",
+   "fieldtype": "Date",
+   "label": "Fecha",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hora",
+   "fieldtype": "Time",
+   "label": "Hora de arranque"
+  },
+  {
+   "fieldname": "docduedate",
+   "fieldtype": "Date",
+   "label": "Fecha de vencimiento"
+  },
+  {
+   "fieldname": "section_break_taoo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "vida_util",
+   "fieldtype": "Int",
+   "label": "Vida \u00fatil"
+  },
+  {
+   "fieldname": "column_break_hjju",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_rhsl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "qc_template.nombre_producto",
+   "fieldname": "itemname",
+   "fieldtype": "Data",
+   "label": "Nombre del producto"
+  },
+  {
+   "fieldname": "column_break_pxzf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tiempo",
+   "fieldtype": "Select",
+   "label": "Tiempo",
+   "options": "D\u00edas\nMeses\nA\u00f1os"
+  },
+  {
+   "fieldname": "section_break_ujgs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "comentarios",
+   "fieldtype": "Text Editor",
+   "label": "Comentario"
+  },
+  {
+   "fieldname": "paquetes_producidos",
+   "fieldtype": "Int",
+   "label": "Paquetes producidos"
+  },
+  {
+   "fieldname": "paquetes_rechazados",
+   "fieldtype": "Int",
+   "label": "Paquetes Rechazados"
+  },
+  {
+   "fieldname": "contro_de_calidad_del_producto_tab",
+   "fieldtype": "Tab Break",
+   "label": "Contro de calidad del producto"
+  },
+  {
+   "fieldname": "section_break_fowd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_vnra",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
+  },
+  {
+   "fieldname": "documentos_base_tab",
+   "fieldtype": "Tab Break",
+   "label": "Documentos Base"
+  },
+  {
+   "fieldname": "documento_base",
+   "fieldtype": "Table",
+   "label": "Documentos base",
+   "options": "QC Producto Base"
+  }
+ ],
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "QC Producto Muestra",
+   "link_fieldname": "qc_producto"
+  },
+  {
+   "link_doctype": "QC Paros de Produccion",
+   "link_fieldname": "qc_producto"
+  }
+ ],
+ "modified": "2026-03-12 15:25:53.933269",
+ "modified_by": "Administrator",
+ "module": "may_quality_management",
+ "name": "QC Producto",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

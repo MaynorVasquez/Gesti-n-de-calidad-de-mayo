@@ -1,0 +1,78 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-02-18 15:29:08.409363",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "categoria",
+  "parametro",
+  "tipo_parametro",
+  "valor_minimo",
+  "valor_maximo",
+  "tipo_ingreso"
+ ],
+ "fields": [
+  {
+   "fieldname": "parametro",
+   "fieldtype": "Link",
+   "label": "Parametro",
+   "options": "QC Parametro"
+  },
+  {
+   "fetch_from": "parametro.categoria",
+   "fieldname": "categoria",
+   "fieldtype": "Data",
+   "label": "categoria",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "parametro.tipo_parametro",
+   "fieldname": "tipo_parametro",
+   "fieldtype": "Data",
+   "label": "Tipo Parametro",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.tipo_parametro == 'N\u00famero'",
+   "fetch_from": "parametro.valor_minimo",
+   "fieldname": "valor_minimo",
+   "fieldtype": "Float",
+   "label": "Valor M\u00ednimo",
+   "precision": "2"
+  },
+  {
+   "depends_on": "eval:doc.tipo_parametro == 'N\u00famero'",
+   "fetch_from": "parametro.valor_maximo",
+   "fieldname": "valor_maximo",
+   "fieldtype": "Float",
+   "label": "Valor M\u00e1ximo",
+   "precision": "2"
+  },
+  {
+   "default": "Obligatorio",
+   "fieldname": "tipo_ingreso",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tipo Ingreso",
+   "options": "Obligatorio\nOpcional",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-03-12 15:44:52.761222",
+ "modified_by": "Administrator",
+ "module": "may_quality_management",
+ "name": "QC Template item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,69 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "Format:{producto}",
+ "creation": "2026-02-18 16:29:50.019725",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "producto",
+  "nombre_producto",
+  "foto_producto",
+  "items"
+ ],
+ "fields": [
+  {
+   "fieldname": "producto",
+   "fieldtype": "Link",
+   "label": "Producto",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "producto.item_name",
+   "fieldname": "nombre_producto",
+   "fieldtype": "Data",
+   "label": "Nombre producto"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "items",
+   "options": "QC Template item"
+  },
+  {
+   "fieldname": "foto_producto",
+   "fieldtype": "Attach Image",
+   "hidden": 1,
+   "label": "Foto del producto"
+  }
+ ],
+ "grid_page_length": 50,
+ "image_field": "foto_producto",
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-24 21:33:29.811347",
+ "modified_by": "Administrator",
+ "module": "may_quality_management",
+ "name": "QC Template",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
