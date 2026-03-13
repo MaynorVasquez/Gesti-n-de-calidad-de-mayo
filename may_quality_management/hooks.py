@@ -7,6 +7,22 @@ app_license = "gpl-3.0"
 app_icon = "octicon octicon-checklist"
 app_color = "blue"
 
+
+fixtures = [
+    {
+        "doctype": "Print Format",
+        "filters": [
+            ["doc_type", "=", "QC Producto"]
+        ]
+    },
+    {
+        "doctype": "Workflow",
+        "filters": [
+            ["name", "=", "QC Producto Status"]
+        ]
+    }
+]
+
 # Apps
 # ------------------
 
