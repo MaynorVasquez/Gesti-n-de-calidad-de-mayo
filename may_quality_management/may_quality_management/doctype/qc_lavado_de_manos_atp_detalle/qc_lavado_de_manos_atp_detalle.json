@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-18 19:29:34.708760",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo_empleado",
+  "nombre_empleado",
+  "area",
+  "column_break_vnbx",
+  "atp_resultado",
+  "cumplimiento",
+  "section_break_ndrr",
+  "acciones_correctivas"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo_empleado",
+   "fieldtype": "Link",
+   "label": "C\u00f3digo de Empleado",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "codigo_empleado.employee_name",
+   "fieldname": "nombre_empleado",
+   "fieldtype": "Data",
+   "label": "Nombre de Empleados"
+  },
+  {
+   "fieldname": "column_break_vnbx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cumplimiento",
+   "fieldtype": "Select",
+   "label": "Complimiento",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "fieldname": "section_break_ndrr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "acciones_correctivas",
+   "fieldtype": "Text Editor",
+   "label": "Acciones Correctivas"
+  },
+  {
+   "fieldname": "atp_resultado",
+   "fieldtype": "Int",
+   "label": "Resultado"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Link",
+   "label": "\u00c1rea",
+   "options": "QC Area de limpieza"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-03-18 21:15:16.267536",
+ "modified_by": "Administrator",
+ "module": "may_quality_management",
+ "name": "QC Lavado de Manos ATP Detalle",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

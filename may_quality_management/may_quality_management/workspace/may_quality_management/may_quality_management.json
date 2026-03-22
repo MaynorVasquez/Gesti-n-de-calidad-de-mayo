@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"VANGkmNrlP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">May Quality Management</span>\",\"col\":12}},{\"id\":\"QMWRrf1HIa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis de Tendencia\",\"col\":3}},{\"id\":\"qDkxkSOhUD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis De Tendencia De Control De Calidad\",\"col\":3}},{\"id\":\"LrDVGqE5Fg\",\"type\":\"card\",\"data\":{\"card_name\":\"Control de calidad del producto\",\"col\":12}},{\"id\":\"Mp6aqrhjoj\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"7W7p4fZoOX\",\"type\":\"card\",\"data\":{\"card_name\":\"Plantilla de formatos\",\"col\":4}},{\"id\":\"x_061FWARF\",\"type\":\"card\",\"data\":{\"card_name\":\"Configuraci\u00f3n\",\"col\":4}}]",
+ "content": "[{\"id\":\"VANGkmNrlP\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Gesti\u00f3n de Calidad</b></span>\",\"col\":12}},{\"id\":\"QMWRrf1HIa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis de Tendencia\",\"col\":3}},{\"id\":\"qDkxkSOhUD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis De Tendencia De Control De Calidad\",\"col\":5}},{\"id\":\"eKzh9r8BqB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis de Inspecci\u00f3n BPM\",\"col\":3}},{\"id\":\"MFM1fXD7eu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1Lisis De Tendencia De Orden Y Limpieza\",\"col\":5}},{\"id\":\"MhSgnWR5hh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis Labado de Manos ATP\",\"col\":4}},{\"id\":\"Mp6aqrhjoj\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"LrDVGqE5Fg\",\"type\":\"card\",\"data\":{\"card_name\":\"Control de calidad del producto\",\"col\":5}},{\"id\":\"IlgortiCOy\",\"type\":\"card\",\"data\":{\"card_name\":\"Control de Orden y Limpieza\",\"col\":4}},{\"id\":\"JkbKPaDZeX\",\"type\":\"card\",\"data\":{\"card_name\":\"Inispecci\u00f3n de Personal\",\"col\":4}},{\"id\":\"7W7p4fZoOX\",\"type\":\"card\",\"data\":{\"card_name\":\"Plantilla de formatos\",\"col\":4}},{\"id\":\"x_061FWARF\",\"type\":\"card\",\"data\":{\"card_name\":\"Configuraci\u00f3n\",\"col\":4}}]",
  "creation": "2026-02-26 17:16:00.933289",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,35 +13,6 @@
  "is_hidden": 0,
  "label": "May Quality Management",
  "links": [
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Configuraci\u00f3n",
-   "link_count": 2,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Categorias de control de calidad",
-   "link_count": 0,
-   "link_to": "QC Categoria",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Parametros de control de calidad",
-   "link_count": 0,
-   "link_to": "QC Parametro",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
   {
    "hidden": 0,
    "is_query_report": 0,
@@ -99,9 +70,96 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Control de Orden y Limpieza",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Control de orden y limpieza",
+   "link_count": 0,
+   "link_to": "QC Orden y Limpieza",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuraci\u00f3n",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Categorias de control de calidad",
+   "link_count": 0,
+   "link_to": "QC Categoria",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Parametros de control de calidad",
+   "link_count": 0,
+   "link_to": "QC Parametro",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u00c1reas de limpieza",
+   "link_count": 0,
+   "link_to": "QC Area de limpieza",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Inispecci\u00f3n de Personal",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Inspecci\u00f3n de Personal",
+   "link_count": 0,
+   "link_to": "QC Inspeccion de Personal",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Lavado de Manos ATP",
+   "link_count": 0,
+   "link_to": "QC Lavado de Manos ATP",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-03-10 13:24:14.805818",
+ "modified": "2026-03-21 23:21:55.367407",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "May Quality Management",
@@ -116,9 +174,33 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "An\u00e1Lisis De Tendencia De Orden Y Limpieza",
+   "link_to": "An\u00e1lisis de Tendencia de Orden y Limpieza",
+   "report_ref_doctype": "QC Orden y Limpieza",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "An\u00e1lisis Labado de Manos ATP",
+   "link_to": "An\u00e1lisis Labado de Manos ATP",
+   "report_ref_doctype": "QC Lavado de Manos ATP",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "An\u00e1lisis de Tendencia",
    "link_to": "An\u00e1lisis de Tendencia por Producto",
    "report_ref_doctype": "QC Producto Muestra",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "An\u00e1lisis de Inspecci\u00f3n BPM",
+   "link_to": "An\u00e1lisis de Inspecci\u00f3n BPM a Personal",
+   "report_ref_doctype": "QC Inspeccion de Personal",
    "type": "Report"
   },
   {

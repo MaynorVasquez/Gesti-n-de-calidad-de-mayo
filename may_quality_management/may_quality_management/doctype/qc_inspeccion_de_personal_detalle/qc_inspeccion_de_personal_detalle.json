@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-17 15:44:37.420616",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo_empleado",
+  "nombre_empleado",
+  "estado",
+  "manos_limpias",
+  "ulc",
+  "barba",
+  "uniforme_limpio",
+  "redecilla",
+  "mascarilla",
+  "maquillaje",
+  "joyeria",
+  "oac"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo_empleado",
+   "fieldtype": "Link",
+   "label": "C\u00f3digo Empleado",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "codigo_empleado.employee_name",
+   "fieldname": "nombre_empleado",
+   "fieldtype": "Data",
+   "label": "Nombre Empleado"
+  },
+  {
+   "default": "Activo",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "options": "Activo\nVacaciones\nSuspendido"
+  },
+  {
+   "default": "Conforme",
+   "fieldname": "manos_limpias",
+   "fieldtype": "Select",
+   "label": "Manos Limpias",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "default": "Conforme",
+   "fieldname": "ulc",
+   "fieldtype": "Select",
+   "label": "U\u00f1as Limpias y Cortas",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "default": "Conforme",
+   "fieldname": "barba",
+   "fieldtype": "Select",
+   "label": "Sin Barba",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "default": "Conforme",
+   "fieldname": "uniforme_limpio",
+   "fieldtype": "Select",
+   "label": "Uniforme Limpio",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "default": "Conforme",
+   "fieldname": "redecilla",
+   "fieldtype": "Select",
+   "label": "Redecilla",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "fieldname": "mascarilla",
+   "fieldtype": "Select",
+   "label": "Mascarilla",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "default": "Conforme",
+   "fieldname": "maquillaje",
+   "fieldtype": "Select",
+   "label": "Sin Maquillaje",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "fieldname": "joyeria",
+   "fieldtype": "Select",
+   "label": "Sin Joyeria",
+   "options": "Conforme\nNo Conforme"
+  },
+  {
+   "fieldname": "oac",
+   "fieldtype": "Text Editor",
+   "label": "Observaciones y Acciones correctivas"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-03-17 16:02:13.058646",
+ "modified_by": "Administrator",
+ "module": "may_quality_management",
+ "name": "QC Inspeccion de Personal Detalle",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,125 @@
+{
+ "actions": [],
+ "autoname": "Format: FORM-CCAL-008-{#######}",
+ "creation": "2026-03-14 17:08:32.883675",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "fecha_inspeccion",
+  "column_break_rvby",
+  "hora_inspeccion",
+  "section_break_mred",
+  "listado_areas",
+  "total",
+  "section_break_wzda",
+  "full_user_name",
+  "column_break_vswb",
+  "firma_supervisor_calidad",
+  "section_break_e4kz",
+  "column_break_hres",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_e4kz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "QC Orden y Limpieza",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "full_user_name",
+   "fieldtype": "Data",
+   "label": "Nombre del usuario",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_mred",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "listado_areas",
+   "fieldtype": "Table",
+   "label": "Listado de \u00c1reas",
+   "options": "QC Orden y Limpieza Detalle"
+  },
+  {
+   "default": "Now",
+   "fieldname": "fecha_inspeccion",
+   "fieldtype": "Date",
+   "label": "Fecha Inspecci\u00f3n"
+  },
+  {
+   "default": "Now",
+   "fieldname": "hora_inspeccion",
+   "fieldtype": "Time",
+   "label": "Hora Inspecci\u00f3n",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_wzda",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_hres",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "firma_supervisor_calidad",
+   "fieldtype": "Signature",
+   "label": "Firma del Supervisor de Calidad"
+  },
+  {
+   "fieldname": "column_break_vswb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Float",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_rvby",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-03-15 22:47:26.891243",
+ "modified_by": "Administrator",
+ "module": "may_quality_management",
+ "name": "QC Orden y Limpieza",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

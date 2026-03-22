@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "QC Producto Muestra",
+  "enabled": 1,
+  "modified": "2026-03-22 11:02:40.734764",
+  "module": "may_quality_management",
+  "name": "QC producto muestra parametros",
+  "script": "frappe.ui.form.on('QC Producto Muestra', {\r\n    refresh: function(frm) {\r\n        // Bloquear los botones de \"Agregar Fila\" y \"Eliminar Fila\"\r\n        frm.set_df_property('detalle_resultados', 'cannot_add_rows', true);\r\n        frm.set_df_property('detalle_resultados', 'cannot_delete_rows', true);\r\n    },\r\n    \r\n    qc_producto: function(frm) {\r\n        // Si el usuario cambia el producto antes de guardar, \r\n        // podrías disparar una llamada al servidor para refrescar la tabla\r\n        if (frm.doc.qc_producto) {\r\n            frm.trigger('cargar_desde_servidor');\r\n        }\r\n    }\r\n});\r\n\r\nfrappe.ui.form.on('QC Muestra Detalle', {\r\n    // 1. Lógica para parámetros NUMÉRICOS\r\n    resultados: function(frm, cdt, cdn) {\r\n        let row = locals[cdt][cdn];\r\n        if (row.tipo_parametro === \"Número\") {\r\n            let valor = flt(row.resultados);\r\n            let min = flt(row.valor_minimo);\r\n            let max = flt(row.valor_maximo);\r\n\r\n            if (valor >= min && valor <= max) {\r\n                row.indicador_vial = \"🟢\";\r\n            } else {\r\n                row.indicador_vial = \"🔴\";\r\n            }\r\n            frm.refresh_field(\"detalle_resultados\");\r\n        }\r\n    },\r\n\r\n    // 2. Lógica para parámetros de SELECCIÓN (Conforme / No Conforme)\r\n    // Suponiendo que el campo se llama \"conformidad\"\r\n    conformidad: function(frm, cdt, cdn) {\r\n        let row = locals[cdt][cdn];\r\n        \r\n        if (row.tipo_parametro === \"Selección\") {\r\n            if (row.conformidad === \"Conforme\") {\r\n                row.indicador_vial = \"🟢\";\r\n            } else if (row.conformidad === \"No Conforme\") {\r\n                row.indicador_vial = \"🔴\";\r\n            } else {\r\n                row.indicador_vial = \"\"; // Limpiar si no hay selección\r\n            }\r\n            frm.refresh_field(\"detalle_resultados\");\r\n        }\r\n    }\r\n});",
+  "view": "Form"
+ }
+]

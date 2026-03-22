@@ -1,0 +1,123 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-18 19:26:59.731980",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_zrjh",
+  "fecha_inspeccion",
+  "supervisor",
+  "column_break_itls",
+  "hora_inspeccion",
+  "section_break_mvdj",
+  "atp_detalle",
+  "section_break_razc",
+  "supervisor_firma",
+  "column_break_kbkg",
+  "coordinador_firma",
+  "section_break_oyko",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_zrjh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "QC Lavado de Manos ATP",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "default": "Now",
+   "fieldname": "fecha_inspeccion",
+   "fieldtype": "Date",
+   "label": "Fecha de Inspecci\u00f3n"
+  },
+  {
+   "fieldname": "section_break_oyko",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Now",
+   "fieldname": "hora_inspeccion",
+   "fieldtype": "Time",
+   "label": "Hora Inspecci\u00f3n"
+  },
+  {
+   "fieldname": "column_break_itls",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "supervisor",
+   "fieldtype": "Data",
+   "label": "Supervisor",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_mvdj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "atp_detalle",
+   "fieldtype": "Table",
+   "label": "Detalle ATP",
+   "options": "QC Lavado de Manos ATP Detalle"
+  },
+  {
+   "fieldname": "section_break_razc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "supervisor_firma",
+   "fieldtype": "Signature",
+   "label": "Firma del Supervisor"
+  },
+  {
+   "fieldname": "coordinador_firma",
+   "fieldtype": "Signature",
+   "label": "Firma del Coordinador"
+  },
+  {
+   "fieldname": "column_break_kbkg",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-03-20 21:59:34.707285",
+ "modified_by": "Administrator",
+ "module": "may_quality_management",
+ "name": "QC Lavado de Manos ATP",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
