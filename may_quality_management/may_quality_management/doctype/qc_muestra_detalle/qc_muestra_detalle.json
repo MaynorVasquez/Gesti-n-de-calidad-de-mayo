@@ -43,17 +43,19 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval:doc.tipo_parametro == 'N\u00famero'",
    "fieldname": "valor_minimo",
    "fieldtype": "Float",
    "label": "Valor M\u00ednimo",
-   "precision": "2",
+   "precision": "4",
    "read_only": 1
   },
   {
+   "depends_on": "eval:doc.tipo_parametro == 'N\u00famero'",
    "fieldname": "valor_maximo",
    "fieldtype": "Float",
    "label": "Valor M\u00e1ximo",
-   "precision": "2",
+   "precision": "4",
    "read_only": 1
   },
   {
@@ -87,7 +89,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-09 13:42:00.830814",
+ "modified": "2026-03-25 15:30:25.184563",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Muestra Detalle",

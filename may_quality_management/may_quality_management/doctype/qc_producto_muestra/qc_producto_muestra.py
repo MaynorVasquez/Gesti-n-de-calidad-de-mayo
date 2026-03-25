@@ -8,31 +8,52 @@ class QCProductoMuestra(Document):
     #     estado_padre = frappe.db.get_value("QC Producto", self.qc_producto, "status")
     #     if estado_padre == "Closed":
     #         frappe.throw(_("No se pueden agregar muestras. El QC Producto {0} está Cerrado").format(self.qc_producto))
+    def validate(self):
+        # Evitar ejecutar si no hay QC Producto
+        if not self.qc_producto:
+            return
 
-    def before_insert(self):
+        # Solo trabajar en borrador (opcional pero recomendado)
+        if self.docstatus != 0:
+            return
 
-        self.validar_estado_padre()
+        self.sincronizar_plantilla()
 
-        # 2. Cargar automáticamente las pruebas desde la plantilla del padre
-        if not self.detalle_resultados:
-            # Obtenemos el nombre de la plantilla desde el QC Producto
-            template_name = frappe.db.get_value("QC Producto", self.qc_producto, "qc_template")
-            
-            if not template_name:
-                frappe.throw(_("El QC Producto seleccionado no tiene una plantilla asignada."))
+    def sincronizar_plantilla(self):
+        template_name = frappe.db.get_value("QC Producto", self.qc_producto, "qc_template")
+        
+        if not template_name:
+            frappe.throw(_("El QC Producto seleccionado no tiene una plantilla asignada."))
 
-            # Traemos los items de la plantilla
-            template_doc = frappe.get_doc("QC Template", template_name)
+        template_doc = frappe.get_doc("QC Template", template_name)
 
-            for item in template_doc.items: # Asumiendo que 'items' es el nombre de la tabla en QC Template
+        # 🔹 Indexar registros existentes
+        existentes = {}
+        for row in self.detalle_resultados:
+            key = (row.categoria, row.parametro)
+            existentes[key] = row
+
+        # 🔹 Recorrer plantilla
+        for item in template_doc.items:
+            key = (item.categoria, item.parametro)
+
+            if key in existentes:
+                # 🔄 UPDATE (solo campos técnicos)
+                row = existentes[key]
+                row.tipo_parametro = item.tipo_parametro
+                row.valor_minimo = item.valor_minimo
+                row.valor_maximo = item.valor_maximo
+                row.tipo_ingreso = item.tipo_ingreso
+
+            else:
+                # ➕ INSERT nuevo
                 self.append("detalle_resultados", {
                     "categoria": item.categoria,
                     "parametro": item.parametro,
                     "tipo_parametro": item.tipo_parametro,
-                    "valor_minimo" : item.valor_minimo,
-                    "valor_maximo" : item.valor_maximo,
-                    "tipo_ingreso" : item.tipo_ingreso
-                    # Los campos de resultado se dejan vacíos para el usuario
+                    "valor_minimo": item.valor_minimo,
+                    "valor_maximo": item.valor_maximo,
+                    "tipo_ingreso": item.tipo_ingreso
                 })
 
     def validar_estado_padre(self):
