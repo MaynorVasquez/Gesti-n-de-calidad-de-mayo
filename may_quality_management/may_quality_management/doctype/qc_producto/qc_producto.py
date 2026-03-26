@@ -5,6 +5,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.utils import add_days, add_months, add_years
 
 class QCProducto(Document):
 
@@ -21,6 +22,22 @@ class QCProducto(Document):
                 frappe.throw(
                     "No se puede cerrar el Control de Calidad porque existen muestras en estado Borrador."
                 )
+
+    def validate(self):
+        self.calcular_fecha_vencimiento()
+
+    def calcular_fecha_vencimiento(self):
+        if not self.docdate or not self.vida_util or not self.tiempo:
+            return
+
+        if self.tiempo == "Días":
+            self.docduedate = add_days(self.docdate, self.vida_util)
+
+        elif self.tiempo == "Meses":
+            self.docduedate = add_months(self.docdate, self.vida_util)
+
+        elif self.tiempo == "Años":
+            self.docduedate = add_years(self.docdate, self.vida_util)
 
     # Añadimos whitelist para que el método sea accesible de forma segura
     @frappe.whitelist()

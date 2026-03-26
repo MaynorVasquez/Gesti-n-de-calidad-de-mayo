@@ -20,7 +20,7 @@
   "docdate",
   "docduedate",
   "section_break_fowd",
-  "paquetes_producidos",
+  "column_break_utok",
   "column_break_vnra",
   "paquetes_rechazados",
   "section_break_ujgs",
@@ -60,10 +60,10 @@
    "default": "Now",
    "fieldname": "docdate",
    "fieldtype": "Date",
-   "label": "Fecha",
-   "read_only": 1
+   "label": "Fecha"
   },
   {
+   "default": "Now",
    "fieldname": "hora",
    "fieldtype": "Time",
    "label": "Hora de arranque"
@@ -116,11 +116,6 @@
    "label": "Comentario"
   },
   {
-   "fieldname": "paquetes_producidos",
-   "fieldtype": "Int",
-   "label": "Paquetes producidos"
-  },
-  {
    "fieldname": "paquetes_rechazados",
    "fieldtype": "Int",
    "label": "Paquetes Rechazados"
@@ -154,6 +149,10 @@
    "fieldtype": "Table",
    "label": "Documentos base",
    "options": "QC Producto Base"
+  },
+  {
+   "fieldname": "column_break_utok",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
@@ -170,7 +169,7 @@
    "link_fieldname": "qc_producto"
   }
  ],
- "modified": "2026-03-12 15:25:53.933269",
+ "modified": "2026-03-26 10:54:52.788919",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Producto",
