@@ -22,18 +22,6 @@ fixtures = [
         ]
     },
     {
-        "doctype": "Document Naming Rule",
-        "filters": [
-            ["document_type", "in", [
-                "QC Inspeccion de Personal", 
-                "QC Orden y Limpieza",
-                "QC Lavado de Manos ATP",
-                "QC Producto",
-                "QC Producto Muestra",
-                "QC Paros de Produccion"]]
-        ]
-    },
-    {
         "doctype": "Client Script",
         "filters": [
             ["module", "=", "may_quality_management"]
