@@ -23,14 +23,17 @@
   {
    "fieldname": "codigo_empleado",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "C\u00f3digo Empleado",
-   "options": "Employee"
+   "options": "Employee",
+   "reqd": 1
   },
   {
    "fetch_from": "codigo_empleado.employee_name",
    "fieldname": "nombre_empleado",
    "fieldtype": "Data",
-   "label": "Nombre Empleado"
+   "label": "Nombre Empleado",
+   "read_only": 1
   },
   {
    "default": "Activo",
@@ -103,7 +106,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-17 16:02:13.058646",
+ "modified": "2026-03-30 16:15:58.375726",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Inspeccion de Personal Detalle",
