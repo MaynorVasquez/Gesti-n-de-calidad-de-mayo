@@ -37,6 +37,21 @@ fixtures = [
     },
 ]
 
+website_route_rules = [
+    {"from_route": "/qc-dashboard", "to_route": "qc_dashboard"},
+    {"from_route": "/qc-dashboard/<path:app_path>", "to_route": "qc_dashboard"},
+]
+
+add_to_apps_screen = [
+    {
+        "name": "qc_dashboard",
+        "logo": "/assets/may_quality_management/images/qc-dashboard.png",
+        "title": "QC Dashboard",
+        "route": "/qc-dashboard",
+        "has_permission": "may_quality_management.permissions.has_app_permission",
+    },
+]
+
 # Apps
 # ------------------
 
