@@ -22,7 +22,7 @@
 
     <form
       @submit.prevent="onSubmit"
-      class="px-6 lg:px-10 py-6 max-w-5xl space-y-5"
+      class="px-4 sm:px-6 lg:px-10 py-6 max-w-5xl space-y-5"
     >
       <section class="card p-5">
         <h3 class="text-sm font-semibold text-gray-900 mb-4">

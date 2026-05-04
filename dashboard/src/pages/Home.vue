@@ -2,7 +2,7 @@
   <div>
     <PageHeader title="Inicio" subtitle="Resumen de los módulos disponibles" />
 
-    <div class="px-6 lg:px-10 py-8 max-w-6xl">
+    <div class="px-4 sm:px-6 lg:px-10 py-8 max-w-6xl">
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <router-link
           to="/atp"

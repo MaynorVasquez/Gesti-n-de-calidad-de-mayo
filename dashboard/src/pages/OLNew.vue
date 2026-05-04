@@ -22,7 +22,7 @@
 
     <form
       @submit.prevent="onSubmit"
-      class="px-6 lg:px-10 py-6 max-w-5xl space-y-5"
+      class="px-4 sm:px-6 lg:px-10 py-6 max-w-5xl space-y-5"
     >
       <section class="card p-5 flex items-end gap-6 flex-wrap">
         <div class="flex-1 min-w-[200px]">

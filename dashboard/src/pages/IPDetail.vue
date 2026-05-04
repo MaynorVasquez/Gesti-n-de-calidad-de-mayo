@@ -40,13 +40,13 @@
 
     <div
       v-if="doc.loading && !doc.doc"
-      class="px-6 lg:px-10 py-16 text-center text-gray-500 text-sm"
+      class="px-4 sm:px-6 lg:px-10 py-16 text-center text-gray-500 text-sm"
     >
       <IconLoader class="w-5 h-5 mx-auto animate-spin mb-2" />
       Cargando…
     </div>
 
-    <div v-else-if="doc.error" class="px-6 lg:px-10 py-12 text-center">
+    <div v-else-if="doc.error" class="px-4 sm:px-6 lg:px-10 py-12 text-center">
       <div class="text-red-600 text-sm mb-3">
         {{
           doc.error?.messages?.[0] ||
@@ -61,7 +61,7 @@
 
     <div
       v-else-if="doc.doc"
-      class="px-6 lg:px-10 py-6 max-w-5xl space-y-5"
+      class="px-4 sm:px-6 lg:px-10 py-6 max-w-5xl space-y-5"
     >
       <div class="flex items-center gap-3 flex-wrap">
         <span class="badge" :class="docstatusClass(doc.doc.docstatus)">

@@ -23,9 +23,9 @@
       </template>
     </PageHeader>
 
-    <div class="px-6 lg:px-10 py-6">
+    <div class="px-4 sm:px-6 lg:px-10 py-6">
       <div class="flex items-end gap-2 mb-4 flex-wrap">
-        <div class="relative flex-1 min-w-[220px] max-w-sm">
+        <div class="relative flex-1 min-w-[180px] sm:min-w-[220px] max-w-sm">
           <IconSearch
             class="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
           />
@@ -111,7 +111,7 @@
       </div>
 
       <div v-else>
-      <div class="card overflow-hidden">
+      <div class="card overflow-hidden hidden md:block">
         <table class="w-full text-sm">
           <thead>
             <tr
@@ -162,6 +162,41 @@
           </tbody>
         </table>
       </div>
+
+      <ul class="md:hidden space-y-2">
+        <li
+          v-for="row in filtered"
+          :key="row.name"
+          class="card p-3 flex items-start gap-3 cursor-pointer hover:bg-gray-50/70 transition"
+          @click="$router.push(`/personal/${encodeURIComponent(row.name)}`)"
+        >
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="font-mono text-xs text-gray-700 truncate">
+                {{ row.name }}
+              </span>
+              <span
+                class="badge shrink-0"
+                :class="docstatusClass(row.docstatus)"
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full"
+                  :class="dotClass(row.docstatus)"
+                />
+                {{ docstatusLabel(row.docstatus) }}
+              </span>
+            </div>
+            <div class="text-sm text-gray-900 truncate">
+              {{ row.supervisor || '—' }}
+            </div>
+            <div class="text-xs text-gray-500 mt-0.5">
+              {{ formatDate(row.fecha_inspeccion) }} ·
+              {{ formatTime(row.hora_inspeccion) }}
+            </div>
+          </div>
+          <IconChevronRight class="w-4 h-4 text-gray-300 mt-1 shrink-0" />
+        </li>
+      </ul>
       <Pagination
         :count="ip.data?.length || 0"
         :has-more="!!ip.hasNextPage"

@@ -1,6 +1,13 @@
 <template>
   <div class="border-b border-gray-200 bg-white">
-    <div class="px-6 lg:px-10 py-4 flex items-center gap-3">
+    <div class="px-4 sm:px-6 lg:px-10 py-4 flex items-center gap-3 flex-wrap">
+      <button
+        @click="sidebar.open()"
+        class="md:hidden text-gray-500 hover:text-gray-900 -ml-1 p-1 rounded hover:bg-gray-100 transition"
+        title="Abrir menú"
+      >
+        <IconMenu class="w-5 h-5" />
+      </button>
       <button
         v-if="back"
         @click="$router.push(back)"
@@ -17,7 +24,9 @@
           {{ subtitle }}
         </p>
       </div>
-      <div class="flex items-center gap-2">
+      <div
+        class="flex items-center gap-2 flex-wrap justify-end w-full md:w-auto order-last md:order-none"
+      >
         <slot name="actions" />
       </div>
     </div>
@@ -26,6 +35,10 @@
 
 <script setup>
 import IconArrowLeft from '~icons/lucide/arrow-left'
+import IconMenu from '~icons/lucide/menu'
+import { useSidebar } from '@/composables/sidebar'
+
+const sidebar = useSidebar()
 
 defineProps({
   title: { type: String, required: true },
