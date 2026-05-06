@@ -83,25 +83,14 @@
               {{ i + 1 }}
             </div>
             <div class="flex-1 min-w-0">
-              <select
+              <EmployeePicker
                 v-model="row.codigo_empleado"
+                :employees="availableEmployeesFor(i)"
+                :invalid="isDuplicate(row)"
                 required
-                class="select w-full text-sm"
-                :class="{
-                  '!border-red-300 !ring-red-200 focus:!ring-red-300':
-                    isDuplicate(row),
-                }"
+                placeholder="Buscar empleado por nombre o código…"
                 @change="onEmployeeChange(row)"
-              >
-                <option value="">Seleccionar empleado…</option>
-                <option
-                  v-for="emp in availableEmployeesFor(i)"
-                  :key="emp.name"
-                  :value="emp.name"
-                >
-                  {{ emp.employee_name }} ({{ emp.name }})
-                </option>
-              </select>
+              />
             </div>
             <select v-model="row.estado" class="select w-32 text-sm">
               <option value="Activo">Activo</option>
@@ -206,6 +195,7 @@ import {
 import PageHeader from '@/components/PageHeader.vue'
 import SignaturePad from '@/components/SignaturePad.vue'
 import ConformidadToggle from '@/components/ConformidadToggle.vue'
+import EmployeePicker from '@/components/EmployeePicker.vue'
 import IconPlus from '~icons/lucide/plus'
 import IconTrash from '~icons/lucide/trash-2'
 import IconCheck from '~icons/lucide/check'
@@ -236,7 +226,7 @@ const saving = ref(false)
 const error = ref('')
 
 function addRow() {
-  form.table_nnkn.push(newPersonalRow())
+  form.table_nnkn.unshift(newPersonalRow())
 }
 
 function removeRow(i) {

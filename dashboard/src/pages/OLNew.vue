@@ -289,7 +289,7 @@ const saving = ref(false)
 const error = ref('')
 
 function addRow() {
-  form.listado_areas.push(newLimpiezaRow())
+  form.listado_areas.unshift(newLimpiezaRow())
 }
 
 function removeRow(i) {

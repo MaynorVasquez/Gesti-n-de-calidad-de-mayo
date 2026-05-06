@@ -81,24 +81,13 @@
                 class="border-t border-gray-100"
               >
                 <td class="px-3 py-2">
-                  <select
+                  <EmployeePicker
                     v-model="row.codigo_empleado"
+                    :employees="availableEmployeesFor(i)"
+                    :invalid="isDuplicate(row)"
                     required
-                    class="select"
-                    :class="{
-                      '!border-red-300 !ring-red-200 focus:!ring-red-300':
-                        isDuplicate(row),
-                    }"
-                  >
-                    <option value="">Seleccionar…</option>
-                    <option
-                      v-for="emp in availableEmployeesFor(i)"
-                      :key="emp.name"
-                      :value="emp.name"
-                    >
-                      {{ emp.employee_name }} ({{ emp.name }})
-                    </option>
-                  </select>
+                    placeholder="Buscar por nombre o código…"
+                  />
                   <div
                     v-if="isDuplicate(row)"
                     class="text-[11px] text-red-600 mt-1 flex items-center gap-1"
@@ -195,6 +184,7 @@ import { useRouter } from 'vue-router'
 import { createATPDoc, useEmployees, useAreas } from '@/data/atp'
 import PageHeader from '@/components/PageHeader.vue'
 import SignaturePad from '@/components/SignaturePad.vue'
+import EmployeePicker from '@/components/EmployeePicker.vue'
 import IconPlus from '~icons/lucide/plus'
 import IconTrash from '~icons/lucide/trash-2'
 import IconCheck from '~icons/lucide/check'
@@ -225,7 +215,7 @@ const saving = ref(false)
 const error = ref('')
 
 function addRow() {
-  form.atp_detalle.push({
+  form.atp_detalle.unshift({
     codigo_empleado: '',
     area: '',
     atp_resultado: null,

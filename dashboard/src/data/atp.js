@@ -60,9 +60,14 @@ export function cancelATPDoc() {
 export function useEmployees() {
   return createListResource({
     doctype: 'Employee',
-    fields: ['name', 'employee_name', 'department'],
+    fields: [
+      'name',
+      'employee_name',
+      'department',
+      'custom_codigo_interno',
+    ],
     filters: { status: 'Active' },
-    pageLength: 200,
+    pageLength: 5000,
     orderBy: 'employee_name asc',
     auto: true,
   })

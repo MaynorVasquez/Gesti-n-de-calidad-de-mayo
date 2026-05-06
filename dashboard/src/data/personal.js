@@ -32,9 +32,9 @@ export function newPersonalRow(emp = {}) {
     barba: 'Conforme',
     uniforme_limpio: 'Conforme',
     redecilla: 'Conforme',
-    mascarilla: '',
+    mascarilla: 'Conforme',
     maquillaje: 'Conforme',
-    joyeria: '',
+    joyeria: 'Conforme',
     oac: '',
   }
 }
