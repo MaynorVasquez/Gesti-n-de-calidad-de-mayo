@@ -44,6 +44,7 @@ class QCProductoMuestra(Document):
                 row.valor_minimo = item.valor_minimo
                 row.valor_maximo = item.valor_maximo
                 row.tipo_ingreso = item.tipo_ingreso
+                row.imprimir = item.imprimir
 
             else:
                 # ➕ INSERT nuevo
@@ -53,7 +54,8 @@ class QCProductoMuestra(Document):
                     "tipo_parametro": item.tipo_parametro,
                     "valor_minimo": item.valor_minimo,
                     "valor_maximo": item.valor_maximo,
-                    "tipo_ingreso": item.tipo_ingreso
+                    "tipo_ingreso": item.tipo_ingreso,
+                    "imprimir": item.imprimir
                 })
 
     def validar_estado_padre(self):

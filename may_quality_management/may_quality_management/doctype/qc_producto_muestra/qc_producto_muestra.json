@@ -11,6 +11,7 @@
   "column_break_wtml",
   "docdate",
   "hora_muestra",
+  "batchnum",
   "section_break_izah",
   "detalle_resultados",
   "section_break_oqlm",
@@ -51,6 +52,7 @@
    "default": "Now",
    "fieldname": "docdate",
    "fieldtype": "Date",
+   "in_standard_filter": 1,
    "label": "Fecha de muestra",
    "read_only": 1
   },
@@ -71,6 +73,7 @@
    "fetch_from": "qc_producto.qc_template",
    "fieldname": "itemcode",
    "fieldtype": "Data",
+   "in_standard_filter": 1,
    "label": "C\u00f3digo del producto",
    "read_only": 1
   },
@@ -90,6 +93,14 @@
   {
    "fieldname": "section_break_izah",
    "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "batchnum",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Lote",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
@@ -97,7 +108,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-12 15:21:35.890870",
+ "modified": "2026-07-13 12:05:54.259032",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Producto Muestra",
@@ -113,6 +124,19 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Quality Manager",
    "share": 1,
    "submit": 1,
    "write": 1

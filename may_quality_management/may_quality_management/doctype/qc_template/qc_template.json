@@ -8,7 +8,10 @@
  "field_order": [
   "producto",
   "nombre_producto",
+  "column_break_lygt",
+  "activo",
   "foto_producto",
+  "section_break_yhah",
   "items"
  ],
  "fields": [
@@ -35,13 +38,27 @@
    "fieldtype": "Attach Image",
    "hidden": 1,
    "label": "Foto del producto"
+  },
+  {
+   "fieldname": "column_break_lygt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "activo",
+   "fieldtype": "Check",
+   "label": "Activo"
+  },
+  {
+   "fieldname": "section_break_yhah",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "image_field": "foto_producto",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-24 21:33:29.811347",
+ "modified": "2026-07-13 09:59:04.059102",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Template",
@@ -57,6 +74,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Quality Manager",
    "share": 1,
    "write": 1
   }

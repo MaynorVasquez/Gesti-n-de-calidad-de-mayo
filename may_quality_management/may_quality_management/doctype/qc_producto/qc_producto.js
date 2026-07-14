@@ -9,6 +9,14 @@
 
 frappe.ui.form.on('QC Producto', {
     refresh: function(frm) {
+        // Mostrar únicamente los QC Template activos
+        frm.set_query("qc_template", function() {
+            return {
+                filters: {
+                    activo: 1
+                }
+            };
+        });
         // 1. Limpiamos ambos botones antes de renderizar
         frm.remove_custom_button(__('Muestra de Calidad'), __('Crear'));
         frm.remove_custom_button(__('Paro de Producción'), __('Crear'));

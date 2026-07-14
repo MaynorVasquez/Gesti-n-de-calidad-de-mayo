@@ -38,6 +38,7 @@
    "default": "Now",
    "fieldname": "fecha_inspeccion",
    "fieldtype": "Date",
+   "in_standard_filter": 1,
    "label": "Fecha de Inspecci\u00f3n"
   },
   {
@@ -95,7 +96,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-20 21:59:34.707285",
+ "modified": "2026-07-08 13:28:29.839050",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Lavado de Manos ATP",
@@ -110,6 +111,19 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Quality Manager",
    "share": 1,
    "submit": 1,
    "write": 1

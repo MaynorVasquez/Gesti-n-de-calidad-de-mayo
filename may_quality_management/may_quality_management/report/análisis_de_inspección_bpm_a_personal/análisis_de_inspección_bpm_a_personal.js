@@ -1,3 +1,4 @@
+
 frappe.query_reports["Análisis de Inspección BPM a Personal"] = {
     "filters": [
         {
@@ -146,24 +147,18 @@ frappe.query_reports["Análisis de Inspección BPM a Personal"] = {
     },
 
 	render_trend_line: function(container, trend_stats) {
-        // Crear contenedor para el gráfico
-        const chart_container = document.createElement("div");
-        chart_container.id = "incident-trend-chart";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
+        const card = createChartCard(
+            container,
+            "Tendencia Diaria de Incidentes"
+        );
 
         // Preparar y ordenar los datos por fecha
         const sorted_dates = Object.keys(trend_stats).sort();
         const data_values = sorted_dates.map(date => trend_stats[date]);
 
         // Configuración del gráfico de Frappe
-        new frappe.Chart("#incident-trend-chart", {
+        // new frappe.Chart("#incident-trend-chart", {
+        const chart = new frappe.Chart(card.body,{
             title: "Tendencia Diaria de Incidentes",
             data: {
                 labels: sorted_dates,
@@ -185,28 +180,24 @@ frappe.query_reports["Análisis de Inspección BPM a Personal"] = {
                 xIsSeries: true // Tratar el eje X como serie de tiempo
             }
         });
+        card.button.onclick = () =>
+            exportSVG(chart,"Tendencia_Diaria_Incidentes");
     },
 
 	render_department_chart: function(container, dept_stats) {
-        // Crear contenedor para el gráfico
-        const chart_container = document.createElement("div");
-        chart_container.id = "dept-incident-chart";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
+        const card = createChartCard(
+            container,
+            "Tendencia por departamento o centro de costo"
+        );
 
         // Extraer etiquetas (Departamentos) y valores (Fallas)
         const labels = Object.keys(dept_stats);
         const values = labels.map(dept => dept_stats[dept].fallas);
 
         // Configuración del gráfico de barras
-        new frappe.Chart("#dept-incident-chart", {
-            title: "Incidentes Detectados por Departamento",
+        // new frappe.Chart("#dept-incident-chart", {
+        const chart = new frappe.Chart(card.body,{    
+            title: "Incidentes Detectados por Departamento o centro de costo",
             data: {
                 labels: labels,
                 datasets: [
@@ -228,67 +219,22 @@ frappe.query_reports["Análisis de Inspección BPM a Personal"] = {
                 formatTooltipY: d => d + " incidentes"
             }
         });
-    },
-
-    render_area_chart: function(container, dept_stats) {
-        // Crear contenedor para el gráfico
-        const chart_container = document.createElement("div");
-        chart_container.id = "dept-incident-chart";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
-
-        // Extraer etiquetas (Departamentos) y valores (Fallas)
-        const labels = Object.keys(dept_stats);
-        const values = labels.map(dept => dept_stats[dept].fallas);
-
-        // Configuración del gráfico de barras
-        new frappe.Chart("#dept-incident-chart", {
-            title: "Incidentes Detectados por Área",
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        name: "Incidentes",
-                        chartType: "bar",
-                        values: values
-                    }
-                ]
-            },
-            type: 'bar',
-            height: 280,
-            colors: ['#ff5858'], // Mantener el rojo de incidentes para consistencia
-            barOptions: {
-                stacked: 0,
-                spaceRatio: 0.5 // Barras un poco más delgadas para un look moderno
-            },
-            tooltipOptions: {
-                formatTooltipY: d => d + " incidentes"
-            }
-        });
+        card.button.onclick = () =>
+            exportSVG(chart,"Incidentes_Departamento");
     },
 
 	render_gender_pie_chart: function(container, gender_stats) {
-        const chart_container = document.createElement("div");
-        chart_container.id = "gender-incident-pie";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
+
+        const card = createChartCard(
+            container,
+            "Incidentes por genero"
+        );
 
         const labels = Object.keys(gender_stats);
         const values = labels.map(g => gender_stats[g]);
 
-        new frappe.Chart("#gender-incident-pie", {
+        // new frappe.Chart("#gender-incident-pie", {
+        const chart = new frappe.Chart(card.body,{  
             title: "Incidentes por Género",
             data: {
                 labels: labels,
@@ -303,24 +249,22 @@ frappe.query_reports["Análisis de Inspección BPM a Personal"] = {
             height: 280,
             colors: ['#ff5858', '#5e64ff', '#ffa00a', '#28a745'] // Rojo dominante para el mayor riesgo
         });
+        card.button.onclick = () =>
+            exportSVG(chart,"Indicentes_por_genero");
     },
 
 	render_status_donut_chart: function(container, status_stats) {
-        const chart_container = document.createElement("div");
-        chart_container.id = "status-employee-donut";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
+
+        const card = createChartCard(
+            container,
+            "Estado del personal"
+        );
 
         const labels = Object.keys(status_stats);
         const values = labels.map(s => status_stats[s]);
 
-        new frappe.Chart("#status-employee-donut", {
+        // new frappe.Chart("#status-employee-donut", {
+        const chart = new frappe.Chart(card.body,{ 
             title: "Estado del Personal Inspeccionado",
             data: {
                 labels: labels,
@@ -338,5 +282,85 @@ frappe.query_reports["Análisis de Inspección BPM a Personal"] = {
                 formatTooltipY: d => d + " personas"
             }
         });
+        card.button.onclick = () =>
+            exportSVG(chart,"Estado_del_personal");
     },
 };
+
+function exportSVG(chart, filename) {
+
+    const svg = chart.parent.querySelector("svg");
+
+    if (!svg) {
+        frappe.msgprint(__("No fue posible obtener la gráfica."));
+        return;
+    }
+
+    let source = new XMLSerializer().serializeToString(svg);
+
+    if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+        source = source.replace(
+            /^<svg/,
+            '<svg xmlns="http://www.w3.org/2000/svg"'
+        );
+    }
+
+    const blob = new Blob([source], {
+        type: "image/svg+xml;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename + ".svg";
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+}
+
+function createChartCard(container, title) {
+
+    const card = document.createElement("div");
+    card.style.cssText = `
+        background:#fff;
+        border:1px solid #d1d8dd;
+        border-radius:8px;
+        padding:15px;
+        margin-top:20px;
+    `;
+
+    const header = document.createElement("div");
+    header.style.cssText = `
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:15px;
+    `;
+
+    const lbl = document.createElement("h5");
+    lbl.innerText = title;
+    lbl.style.margin = "0";
+
+    const btn = document.createElement("button");
+    btn.className = "btn btn-default btn-xs";
+    btn.innerHTML = '<i class="fa fa-download"></i> Exportar gráfica';
+
+    const body = document.createElement("div");
+
+    header.appendChild(lbl);
+    header.appendChild(btn);
+
+    card.appendChild(header);
+    card.appendChild(body);
+
+    container.appendChild(card);
+
+    return {
+        body,
+        button: btn
+    };
+}

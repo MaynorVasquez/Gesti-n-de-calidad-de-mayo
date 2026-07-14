@@ -88,6 +88,9 @@ def get_data(filters):
     if filters.get("fecha_fin"):
         conditions.append("T0.docdate <= %(fecha_fin)s")
     
+    if filters.get("parametro"):
+        conditions.append("T1.parametro = %(parametro)s")
+    
     # Si agregaste el filtro de 'parametro' que discutimos antes:
     #if filters.get("parametro"):
     #    conditions.append("T1.parametro = %(parametro)s")

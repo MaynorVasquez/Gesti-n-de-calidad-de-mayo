@@ -2,7 +2,7 @@ frappe.query_reports["Análisis de Tendencia por Producto"] = {
     "filters": [
         {
             "fieldname": "qc_producto",
-            "label": __("Seleccionar Producto"),
+            "label": __("Seleccionar formulario"),
             "fieldtype": "Link",
             "options": "QC Producto",
             "reqd": 1,
@@ -57,28 +57,34 @@ frappe.query_reports["Análisis de Tendencia por Producto"] = {
             "fieldtype": "Date",
             "read_only": 1 // Esto evita que el usuario lo edite
         },
+		{
+			"fieldname": "parametro",
+			"label": __("Parámetro"),
+			"fieldtype": "Link",
+			"options": "QC Parametro",
+			"on_change": function() {
+				// Refresca el reporte automáticamente en cuanto el usuario elige o borra un parámetro
+				frappe.query_report.refresh();
+			}
+		}
     ],
     after_datatable_render: function(report) {
 
 		const rows = report.datamanager.data;
-		console.log(report)
 
 		if (!rows || !rows.length) {
-			console.log("No hay datos");
+			//console.log("No hay datos");
+			let old_area = report.wrapper.querySelector(".custom-charts-section");
+            if (old_area) old_area.innerHTML = "";
 			return;
 		}
 
-		let area = report.wrapper.querySelector(".chart-area");
-		if (!area) {
-            // Si no existe .chart-area, buscamos .report-graph (estándar de Frappe)
-            area = report.wrapper.querySelector(".report-graph");
-        }
-
+		let area = report.wrapper.querySelector(".custom-charts-section");
         if (!area) {
-            // Si sigue sin existir, creamos un div nuevo para no borrar la tabla
+            // Si no existe (primera carga), lo creamos
             area = document.createElement("div");
             area.className = "custom-charts-section";
-            // Lo insertamos antes de la tabla (datatable)
+            // Lo insertamos antes de la tabla
             report.wrapper.prepend(area);
         }
 		//const area = report.wrapper.querySelector(".chart-area") || report.wrapper;
@@ -118,14 +124,47 @@ frappe.query_reports["Análisis de Tendencia por Producto"] = {
 
 			const info = grouped[param];
 
-			const wrapper = document.createElement("div");
-			wrapper.style.height = "300px";
-			wrapper.style.marginBottom = "40px";
+			// const wrapper = document.createElement("div");
+			// wrapper.style.height = "300px";
+			// wrapper.style.marginBottom = "40px";
 
-			area.appendChild(wrapper);
+			// area.appendChild(wrapper);
+			const card = document.createElement("div");
+			card.className = "chart-card";
+			card.style.marginBottom = "35px";
+			card.style.border = "1px solid #d1d8dd";
+			card.style.borderRadius = "8px";
+			card.style.padding = "15px";
+			card.style.backgroundColor = "#fff";
+
+			const header = document.createElement("div");
+			header.style.display = "flex";
+			header.style.justifyContent = "space-between";
+			header.style.alignItems = "center";
+			header.style.marginBottom = "15px";
+
+			const title = document.createElement("h5");
+			title.innerText = param;
+			title.style.margin = "0";
+
+			const btn = document.createElement("button");
+			btn.className = "btn btn-default btn-xs";
+			btn.innerHTML = '<i class="fa fa-download"></i> Exportar gráfica';
+
+			header.appendChild(title);
+			header.appendChild(btn);
+
+			const wrapper = document.createElement("div");
+			wrapper.style.height = "320px";
+
+			card.appendChild(header);
+			card.appendChild(wrapper);
+
+			area.appendChild(card);
 
 			if (info.tipo === 'Número') {
-				new frappe.Chart(wrapper, {
+				const chart = new frappe.Chart(wrapper, {
+				// new frappe.Chart(wrapper, {
 					title: param,
 					data: {
 						labels: info.labels,
@@ -138,6 +177,7 @@ frappe.query_reports["Análisis de Tendencia por Producto"] = {
 					type: "line",
 					height: 350
 				});
+				btn.onclick = () => exportSVG(chart, param);
 			} else {
 				// --- GRÁFICO DE PASTEL / PORCENTAJE ---
 				const pie_labels = Object.keys(info.conteo_seleccion); 
@@ -146,7 +186,8 @@ frappe.query_reports["Análisis de Tendencia por Producto"] = {
 				// Calculamos el total para el subtítulo o leyenda
 				const total = pie_values.reduce((a, b) => a + b, 0);
 
-				new frappe.Chart(wrapper, {
+				// new frappe.Chart(wrapper, {
+				const chart = new frappe.Chart(wrapper, {
 					title: `${param} (Total: ${total} muestras)`,
 					data: {
 						labels: pie_labels,
@@ -168,7 +209,43 @@ frappe.query_reports["Análisis de Tendencia por Producto"] = {
 						formatTooltipY: d => ((d / total) * 100).toFixed(1) + "% (" + d + ")"
 					}
 				});
+				btn.onclick = () => exportSVG(chart, param);
 			}
 		});
 	}
 };
+
+function exportSVG(chart, filename) {
+
+    const svg = chart.parent.querySelector("svg");
+
+    if (!svg) {
+        frappe.msgprint(__("No fue posible obtener la gráfica."));
+        return;
+    }
+
+    let source = new XMLSerializer().serializeToString(svg);
+
+    if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+        source = source.replace(
+            /^<svg/,
+            '<svg xmlns="http://www.w3.org/2000/svg"'
+        );
+    }
+
+    const blob = new Blob([source], {
+        type: "image/svg+xml;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${filename}.svg`;
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+}

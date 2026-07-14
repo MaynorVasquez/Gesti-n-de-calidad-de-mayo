@@ -78,19 +78,32 @@ def get_columns():
     ]
 
 def get_data(filters):
+    # 1. Iniciamos con una condición siempre verdadera para evitar errores de sintaxis
+    conditions = ["1=1"]
+
+
+    if filters.get("qc_producto"):
+        conditions.append("T2.name= %(qc_producto)s")
+
+    if filters.get("parametro"):
+        conditions.append("T1.parametro = %(parametro)s")
+    
+    # 3. Unimos las condiciones con " AND "
+    where_clause = " AND ".join(conditions)
+
     # Tu consulta SQL que ya tienes, asegurándote de incluir d.valor_minimo y d.valor_maximo
-    return frappe.db.sql("""
+    return frappe.db.sql(f"""
         SELECT 
-            p.docdate, 
-            p.hora_muestra,
-        	d.parametro, 
-            d.resultados as resultado, 
-            d.valor_minimo, 
-            d.valor_maximo, 
-            d.indicador_vial,
-            d.tipo_parametro,
-            d.conformidad,
-            T2.name as correlativo_qc_producto,
+            T0.docdate, 
+            T0.hora_muestra,
+        	T1.parametro, 
+            T1.resultados as resultado, 
+            T1.valor_minimo, 
+            T1.valor_maximo, 
+            T1.indicador_vial,
+            T1.tipo_parametro,
+            T1.conformidad,
+            T2.name as formulario,
             T2.qc_template,
             T2.itemname,
             T2.vida_util,
@@ -99,10 +112,10 @@ def get_data(filters):
             T2.tiempo,
             T2.batchnum,
             T2.hora as hora_qc_producto
-        FROM `tabQC Producto Muestra` p
-        INNER JOIN `tabQC Muestra Detalle` d ON d.parent = p.name
-        INNER JOIN `tabQC Producto` T2 ON T2.name = p.qc_producto
-        WHERE p.qc_producto = %(qc_producto)s
-        ORDER BY p.docdate ASC, p.hora_muestra ASC
+        FROM `tabQC Producto Muestra` T0
+        INNER JOIN `tabQC Muestra Detalle` T1 ON T1.parent = T0.name
+        INNER JOIN `tabQC Producto` T2 ON T2.name = T0.qc_producto
+        WHERE {where_clause}
+        ORDER BY T0.docdate ASC, T0.hora_muestra ASC
 
     """, filters, as_dict=1)

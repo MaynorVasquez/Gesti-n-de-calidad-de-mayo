@@ -140,22 +140,17 @@ frappe.query_reports["Análisis Lavado de Manos ATP"] = {
     },
 
     render_incident_trend_chart: function(container, trend_data) {
-        const chart_container = document.createElement("div");
-        chart_container.id = "incident-daily-chart";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
+        const card = createChartCard(
+            container,
+            "Tendencia Diaria de Incidentes"
+        );
 
         // ORDENAMIENTO: Es vital para que la tendencia tenga sentido
         const sorted_dates = Object.keys(trend_data).sort((a, b) => new Date(a) - new Date(b));
         const incident_values = sorted_dates.map(date => trend_data[date]);
 
-        new frappe.Chart("#incident-daily-chart", {
+        // new frappe.Chart("#incident-daily-chart", {
+        const chart = new frappe.Chart(card.body,{
             title: "Tendencia Diaria de Incidentes (No Conformes)",
             data: {
                 labels: sorted_dates, // Fechas en el Eje X
@@ -182,25 +177,21 @@ frappe.query_reports["Análisis Lavado de Manos ATP"] = {
                 formatTooltipY: d => d + " incidentes"
             }
         });
+        card.button.onclick = () =>
+            exportSVG(chart,"Tendencia_Diaria_Incidentes");
     },
 
     render_dept_bar_chart: function(container, dept_data) {
-        const chart_container = document.createElement("div");
-        chart_container.id = "dept-incidents-bar";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
+        const card = createChartCard(
+            container,
+            "Indidentes por departamento"
+        );
 
         // Ordenar departamentos por cantidad de incidentes (Descendente)
         const sorted_depts = Object.keys(dept_data).sort((a, b) => dept_data[b] - dept_data[a]);
         const values = sorted_depts.map(d => dept_data[d]);
 
-        new frappe.Chart("#dept-incidents-bar", {
+        const chart = new frappe.Chart(card.body,{
             title: "Incidentes por Departamento",
             data: {
                 labels: sorted_depts,
@@ -220,25 +211,21 @@ frappe.query_reports["Análisis Lavado de Manos ATP"] = {
                 formatTooltipY: d => d + " incidentes detectados"
             }
         });
+        card.button.onclick = () =>
+            exportSVG(chart,"incidentes_por_departamento");
     },
 
     render_area_bar_chart: function(container, area_data) {
-        const chart_container = document.createElement("div");
-        chart_container.id = "area-incidents-bar";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
+        const card = createChartCard(
+            container,
+            "Incidentes por área"
+        );
 
         // Ordenar áreas por cantidad de incidentes (Mayor a Menor)
         const sorted_areas = Object.keys(area_data).sort((a, b) => area_data[b] - area_data[a]);
         const values = sorted_areas.map(a => area_data[a]);
 
-        new frappe.Chart("#area-incidents-bar", {
+        const chart = new frappe.Chart(card.body,{
             title: "Incidentes por Área Específica",
             data: {
                 labels: sorted_areas,
@@ -258,24 +245,20 @@ frappe.query_reports["Análisis Lavado de Manos ATP"] = {
                 formatTooltipY: d => d + " fallas detectadas"
             }
         });
+        card.button.onclick = () =>
+            exportSVG(chart,"indidentes_por_area");
     },
 
     render_gender_pie_chart: function(container, gender_stats) {
-        const chart_container = document.createElement("div");
-        chart_container.id = "gender-incident-pie";
-        chart_container.style.cssText = `
-            background: #fff; 
-            border: 1px solid #d1d8dd; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-top: 20px;
-        `;
-        container.appendChild(chart_container);
+        const card = createChartCard(
+            container,
+            "Incidentes por área"
+        );
 
         const labels = Object.keys(gender_stats);
         const values = labels.map(g => gender_stats[g]);
 
-        new frappe.Chart("#gender-incident-pie", {
+        const chart = new frappe.Chart(card.body,{
             title: "Incidentes por Género",
             data: {
                 labels: labels,
@@ -290,6 +273,86 @@ frappe.query_reports["Análisis Lavado de Manos ATP"] = {
             height: 280,
             colors: ['#ff5858', '#5e64ff', '#ffa00a', '#28a745'] // Rojo dominante para el mayor riesgo
         });
+        card.button.onclick = () =>
+            exportSVG(chart,"incidentes_por_genero");
     },
 
 };
+
+function exportSVG(chart, filename) {
+
+    const svg = chart.parent.querySelector("svg");
+
+    if (!svg) {
+        frappe.msgprint(__("No fue posible obtener la gráfica."));
+        return;
+    }
+
+    let source = new XMLSerializer().serializeToString(svg);
+
+    if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+        source = source.replace(
+            /^<svg/,
+            '<svg xmlns="http://www.w3.org/2000/svg"'
+        );
+    }
+
+    const blob = new Blob([source], {
+        type: "image/svg+xml;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename + ".svg";
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+}
+
+function createChartCard(container, title) {
+
+    const card = document.createElement("div");
+    card.style.cssText = `
+        background:#fff;
+        border:1px solid #d1d8dd;
+        border-radius:8px;
+        padding:15px;
+        margin-top:20px;
+    `;
+
+    const header = document.createElement("div");
+    header.style.cssText = `
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:15px;
+    `;
+
+    const lbl = document.createElement("h5");
+    lbl.innerText = title;
+    lbl.style.margin = "0";
+
+    const btn = document.createElement("button");
+    btn.className = "btn btn-default btn-xs";
+    btn.innerHTML = '<i class="fa fa-download"></i> Exportar gráfica';
+
+    const body = document.createElement("div");
+
+    header.appendChild(lbl);
+    header.appendChild(btn);
+
+    card.appendChild(header);
+    card.appendChild(body);
+
+    container.appendChild(card);
+
+    return {
+        body,
+        button: btn
+    };
+}

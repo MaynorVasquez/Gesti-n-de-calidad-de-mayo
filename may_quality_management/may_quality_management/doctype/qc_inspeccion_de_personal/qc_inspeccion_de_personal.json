@@ -37,6 +37,7 @@
    "default": "Now",
    "fieldname": "fecha_inspeccion",
    "fieldtype": "Date",
+   "in_standard_filter": 1,
    "label": "Fecha Inspecci\u00f3n"
   },
   {
@@ -53,6 +54,7 @@
   {
    "fieldname": "supervisor",
    "fieldtype": "Data",
+   "in_standard_filter": 1,
    "label": "Supervisor",
    "read_only": 1
   },
@@ -89,7 +91,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-19 15:45:53.915106",
+ "modified": "2026-07-08 13:26:45.999251",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Inspeccion de Personal",
@@ -104,6 +106,19 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Quality Manager",
    "share": 1,
    "submit": 1,
    "write": 1

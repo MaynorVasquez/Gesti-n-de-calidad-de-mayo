@@ -11,7 +11,8 @@
   "tipo_parametro",
   "valor_minimo",
   "valor_maximo",
-  "tipo_ingreso"
+  "tipo_ingreso",
+  "imprimir"
  ],
  "fields": [
   {
@@ -61,13 +62,20 @@
    "label": "Tipo Ingreso",
    "options": "Obligatorio\nOpcional",
    "reqd": 1
+  },
+  {
+   "default": "imprimir",
+   "fieldname": "imprimir",
+   "fieldtype": "Select",
+   "label": "Imprimir",
+   "options": "imprimir\nNo imprimir"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-26 09:56:09.327700",
+ "modified": "2026-07-13 12:45:07.812658",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Template item",

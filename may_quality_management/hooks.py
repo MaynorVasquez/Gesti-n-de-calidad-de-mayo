@@ -52,6 +52,10 @@ add_to_apps_screen = [
     },
 ]
 
+app_include_js = [
+    "/assets/may_quality_management/js/chart_export.js"
+]
+
 # Apps
 # ------------------
 

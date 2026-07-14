@@ -85,33 +85,39 @@ frappe.query_reports["Análisis de Tendencia de Orden y Limpieza"] = {
             objetivo.push(100); // Siempre 100 para todos los departamentos
         });
 
+        const card = createChartCard(
+            chart_container,
+            "Cumplimiento por departamento"
+        );
+
         // --- 2. RENDERIZAR GRÁFICO COMBINADO ---
-        new frappe.Chart(chart_container, {
-            title: __("Cumplimiento de Puntaje vs. Objetivo (100 pts)"),
+        // new frappe.Chart(chart_container, {
+        const chart = new frappe.Chart(card.body, {
+            // title: __("Cumplimiento por departamento"),
             data: {
                 labels: labels,
                 datasets: [
                     {
-                        name: __("Objetivo"),
-                        values: objetivo,
-                        chartType: 'line' // Esto crea la línea estática arriba
-                    },
-                    {
                         name: __("Puntaje Alcanzado"),
-                        values: alcanzado,
-                        chartType: 'bar'
+                        values: alcanzado
                     }
-                ]
+                ],
+                yMarkers: [
+                        { label: "", value: 100, options: { labelPos: 'left' } }, // Ancla el techo
+                        { label: "", value: 0, options: { labelPos: 'left' } }    // Ancla el piso (opcional, pero recomendado)
+                    ]
             },
-            type: 'axis-mixed', // Tipo mixto para permitir línea y barra juntas
+            type: 'bar', // Tipo mixto para permitir línea y barra juntas
             height: 300,
-            colors: ['#eb5757', '#5e64ff'], // Rojo para el objetivo, Azul para el actual
+            colors: ['#09a451', '#5e64ff'], // Rojo para el objetivo, Azul para el actual
             tooltipOptions: {
                 formatTooltipY: d => d + " / 100 pts"
             }
         });
         render_trend_line_chart(report, rows);
 		render_department_kpis(report, dept_stats);
+        card.button.onclick = () =>
+            exportSVG(chart, "Cumplimiento_vs_Objetivo");
 
     }
 };
@@ -234,7 +240,10 @@ function render_trend_line_chart(report, rows) {
         });
         const sorted_keys = Object.keys(stats).sort();
         const labels = sorted_keys.map(k => stats[k].label);
-        const values = sorted_keys.map(k => (stats[k].suma / stats[k].conteo).toFixed(2));
+        // const values = sorted_keys.map(k => (stats[k].suma / stats[k].conteo).toFixed(2));
+        const values = sorted_keys.map(k =>
+            flt((stats[k].suma / stats[k].conteo).toFixed(2))
+        );
 
         // --- SOLUCIÓN AL ERROR DE SVG ---
         if (labels.length > 0) {
@@ -249,15 +258,24 @@ function render_trend_line_chart(report, rows) {
             };
 
             const title = __("Tendencia de Calidad (" + (group_labels[group_by] || "Diaria") + ")");
-
-            new frappe.Chart(trend_chart_container, {
+            const card = createChartCard(
+                trend_chart_container,
+                title
+            );
+            const chart = new frappe.Chart(card.body, {
                 title: title,
                 data: {
                     labels: labels,
                     datasets: [{
                         name: __("Promedio"),
                         values: values
-                    }]
+                    }],
+                    // --- EL TRUCO VISUAL ---
+                    // Estos marcadores obligan al eje Y a dibujarse estéticamente de 0 a 120
+                    yMarkers: [
+                        { label: "", value: 100, options: { labelPos: 'left' } }, // Ancla el techo
+                        { label: "", value: 0, options: { labelPos: 'left' } }    // Ancla el piso (opcional, pero recomendado)
+                    ]
                 },
                 type: chart_type, 
                 height: 300,
@@ -265,12 +283,10 @@ function render_trend_line_chart(report, rows) {
                 lineOptions: { 
                     regionFill: 1, 
                     hideDots: 0 
-                },
-                axisOptions: { 
-                    xIsSeries: 1,
-                    xAxisMode: 'tick' 
                 }
             });
+            card.button.onclick = () =>
+                exportSVG(chart, title.replace(/\s+/g,"_"));
         }
     } catch (e) {
         console.error("Error en render_trend_line_chart:", e);
@@ -288,4 +304,82 @@ function getISOWeek(date) {
 
     return 1 + Math.round(((tempDate - week1) / 86400000
         - 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+function exportSVG(chart, filename) {
+
+    const svg = chart.parent.querySelector("svg");
+
+    if (!svg) {
+        frappe.msgprint(__("No fue posible obtener la gráfica."));
+        return;
+    }
+
+    let source = new XMLSerializer().serializeToString(svg);
+
+    if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+        source = source.replace(
+            /^<svg/,
+            '<svg xmlns="http://www.w3.org/2000/svg"'
+        );
+    }
+
+    const blob = new Blob([source], {
+        type: "image/svg+xml;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename + ".svg";
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+}
+
+function createChartCard(container, title) {
+
+    const card = document.createElement("div");
+    card.style.cssText = `
+        background:#fff;
+        border:1px solid #d1d8dd;
+        border-radius:8px;
+        padding:15px;
+        margin-top:20px;
+    `;
+
+    const header = document.createElement("div");
+    header.style.cssText = `
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:15px;
+    `;
+
+    const lbl = document.createElement("h5");
+    lbl.innerText = title;
+    lbl.style.margin = "0";
+
+    const btn = document.createElement("button");
+    btn.className = "btn btn-default btn-xs";
+    btn.innerHTML = '<i class="fa fa-download"></i> Exportar gráfica';
+
+    const body = document.createElement("div");
+
+    header.appendChild(lbl);
+    header.appendChild(btn);
+
+    card.appendChild(header);
+    card.appendChild(body);
+
+    container.appendChild(card);
+
+    return {
+        body,
+        button: btn
+    };
 }
