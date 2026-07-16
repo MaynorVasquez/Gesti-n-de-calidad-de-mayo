@@ -9,6 +9,12 @@ import IPDetail from './pages/IPDetail.vue'
 import OLList from './pages/OLList.vue'
 import OLNew from './pages/OLNew.vue'
 import OLDetail from './pages/OLDetail.vue'
+import MuestraList from './pages/MuestraList.vue'
+import MuestraNew from './pages/MuestraNew.vue'
+import MuestraDetail from './pages/MuestraDetail.vue'
+import ParoList from './pages/ParoList.vue'
+import ParoNew from './pages/ParoNew.vue'
+import ParoDetail from './pages/ParoDetail.vue'
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -37,6 +43,24 @@ const routes = [
     path: '/limpieza/:name',
     name: 'ol-detail',
     component: OLDetail,
+    props: true,
+  },
+
+  { path: '/muestras', name: 'muestra-list', component: MuestraList },
+  { path: '/muestras/new', name: 'muestra-new', component: MuestraNew },
+  {
+    path: '/muestras/:name',
+    name: 'muestra-detail',
+    component: MuestraDetail,
+    props: true,
+  },
+
+  { path: '/paros', name: 'paro-list', component: ParoList },
+  { path: '/paros/new', name: 'paro-new', component: ParoNew },
+  {
+    path: '/paros/:name',
+    name: 'paro-detail',
+    component: ParoDetail,
     props: true,
   },
 ]

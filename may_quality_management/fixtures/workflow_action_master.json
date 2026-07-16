@@ -1,0 +1,20 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "name": "Guardar",
+  "workflow_action_name": "Guardar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "name": "Cerrar",
+  "workflow_action_name": "Cerrar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "name": "Cancelado",
+  "workflow_action_name": "Cancelado"
+ }
+]

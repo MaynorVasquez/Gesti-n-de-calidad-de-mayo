@@ -61,6 +61,8 @@ import IconHome from '~icons/lucide/home'
 import IconDroplets from '~icons/lucide/droplets'
 import IconUsers from '~icons/lucide/users'
 import IconSparkles from '~icons/lucide/sparkles'
+import IconFlask from '~icons/lucide/flask-conical'
+import IconPause from '~icons/lucide/circle-pause'
 
 const STORAGE_KEY = 'qc-sidebar-collapsed'
 const collapsed = ref(localStorage.getItem(STORAGE_KEY) === '1')
@@ -81,6 +83,8 @@ const nav = [
   { to: '/atp', label: 'Lavado de Manos ATP', icon: IconDroplets },
   { to: '/personal', label: 'Inspección de Personal', icon: IconUsers },
   { to: '/limpieza', label: 'Orden y Limpieza', icon: IconSparkles },
+  { to: '/muestras', label: 'Muestras de Producto', icon: IconFlask },
+  { to: '/paros', label: 'Paros de Producción', icon: IconPause },
 ]
 
 const user = computed(

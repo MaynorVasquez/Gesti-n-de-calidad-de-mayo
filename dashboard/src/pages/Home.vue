@@ -63,6 +63,46 @@
             Inspecciones por área con 6 criterios y cálculo de cumplimiento
           </div>
         </router-link>
+
+        <router-link
+          to="/muestras"
+          class="group block p-5 card hover:border-gray-300 hover:shadow-sm transition"
+        >
+          <div class="flex items-start justify-between mb-4">
+            <div
+              class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center"
+            >
+              <IconFlask class="w-5 h-5" />
+            </div>
+            <IconArrowRight
+              class="w-4 h-4 text-gray-300 group-hover:text-gray-700 group-hover:translate-x-0.5 transition"
+            />
+          </div>
+          <div class="font-medium text-gray-900">Muestras de Producto</div>
+          <div class="text-xs text-gray-500 mt-1 leading-relaxed">
+            Registro de muestras por lote con parámetros de la plantilla QC
+          </div>
+        </router-link>
+
+        <router-link
+          to="/paros"
+          class="group block p-5 card hover:border-gray-300 hover:shadow-sm transition"
+        >
+          <div class="flex items-start justify-between mb-4">
+            <div
+              class="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center"
+            >
+              <IconPause class="w-5 h-5" />
+            </div>
+            <IconArrowRight
+              class="w-4 h-4 text-gray-300 group-hover:text-gray-700 group-hover:translate-x-0.5 transition"
+            />
+          </div>
+          <div class="font-medium text-gray-900">Paros de Producción</div>
+          <div class="text-xs text-gray-500 mt-1 leading-relaxed">
+            Registro de paros sobre controles de calidad abiertos
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -74,4 +114,6 @@ import IconDroplets from '~icons/lucide/droplets'
 import IconArrowRight from '~icons/lucide/arrow-right'
 import IconUsers from '~icons/lucide/users'
 import IconBroom from '~icons/lucide/sparkles'
+import IconFlask from '~icons/lucide/flask-conical'
+import IconPause from '~icons/lucide/circle-pause'
 </script>

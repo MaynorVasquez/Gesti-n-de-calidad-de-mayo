@@ -93,7 +93,8 @@ class QCProductoMuestra(Document):
 
             value = row.get(field_to_validate)
 
-            if not value:
+            # 0 es un resultado válido; solo rechazar vacío/None
+            if value is None or value == "":
                 frappe.throw(
                     f"Debe completar el parámetro '{row.parametro}' en la fila {row.idx}"
                 )

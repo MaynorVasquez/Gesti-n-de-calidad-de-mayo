@@ -16,6 +16,18 @@ fixtures = [
         ]
     },
     {
+        "doctype": "Workflow State",
+        "filters": [
+            ["name", "in", ["Borrador", "Abierto", "Cerrado", "Cancelado"]]
+        ]
+    },
+    {
+        "doctype": "Workflow Action Master",
+        "filters": [
+            ["name", "in", ["Guardar", "Cerrar", "Cancelado"]]
+        ]
+    },
+    {
         "doctype": "Workflow",
         "filters": [
             ["name", "=", "QC Producto Status"]

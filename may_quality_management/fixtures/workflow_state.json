@@ -1,0 +1,34 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": null,
+  "name": "Borrador",
+  "style": "Info",
+  "workflow_state_name": "Borrador"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": null,
+  "name": "Abierto",
+  "style": "Primary",
+  "workflow_state_name": "Abierto"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": null,
+  "name": "Cerrado",
+  "style": "Success",
+  "workflow_state_name": "Cerrado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": null,
+  "name": "Cancelado",
+  "style": "Danger",
+  "workflow_state_name": "Cancelado"
+ }
+]
