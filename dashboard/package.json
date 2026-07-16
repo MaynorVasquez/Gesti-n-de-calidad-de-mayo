@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "frappe-ui": "^0.1.94",
+    "frappe-ui": "^0.1.278",
     "signature_pad": "^4.2.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"

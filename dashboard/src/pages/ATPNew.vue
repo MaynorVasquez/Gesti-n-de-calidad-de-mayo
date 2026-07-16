@@ -8,10 +8,10 @@
       <template #actions>
         <router-link to="/atp" class="btn-secondary">Cancelar</router-link>
         <button
-          type="button"
+          type="submit"
+          form="atp-new-form"
           class="btn-primary"
           :disabled="saving"
-          @click="onSubmit"
         >
           <IconLoader v-if="saving" class="w-4 h-4 animate-spin" />
           <IconCheck v-else class="w-4 h-4" />
@@ -20,7 +20,11 @@
       </template>
     </PageHeader>
 
-    <form @submit.prevent="onSubmit" class="px-4 sm:px-6 lg:px-10 py-6 max-w-5xl space-y-5">
+    <form
+      id="atp-new-form"
+      @submit.prevent="onSubmit"
+      class="px-4 sm:px-6 lg:px-10 py-6 max-w-5xl space-y-5"
+    >
       <section class="card p-5">
         <h3 class="text-sm font-semibold text-gray-900 mb-4">
           Información general
@@ -66,27 +70,28 @@
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="bg-gray-50 text-left text-xs uppercase tracking-wider text-gray-500">
-                <th class="px-4 py-2.5 font-medium">Empleado</th>
-                <th class="px-4 py-2.5 font-medium">Área</th>
-                <th class="px-4 py-2.5 font-medium w-28">Resultado</th>
-                <th class="px-4 py-2.5 font-medium w-36">Cumplimiento</th>
+              <tr class="thead-row">
+                <th class="th">Empleado</th>
+                <th class="th">Área</th>
+                <th class="th w-28">Resultado</th>
+                <th class="th w-36">Cumplimiento</th>
                 <th class="px-4 py-2.5 w-10"></th>
               </tr>
             </thead>
             <tbody>
               <tr
                 v-for="(row, i) in form.atp_detalle"
-                :key="i"
+                :key="row._key"
                 class="border-t border-gray-100"
               >
                 <td class="px-3 py-2">
                   <EmployeePicker
                     v-model="row.codigo_empleado"
-                    :employees="availableEmployeesFor(i)"
+                    :employees="availableFor(i, employees.data)"
                     :invalid="isDuplicate(row)"
                     required
                     placeholder="Buscar por nombre o código…"
+                    @change="(emp) => onEmployeeChange(row, emp)"
                   />
                   <div
                     v-if="isDuplicate(row)"
@@ -167,126 +172,79 @@
         </div>
       </section>
 
-      <div
-        v-if="error"
-        class="card p-3 border-red-200 bg-red-50 text-red-700 text-sm flex items-start gap-2"
-      >
-        <IconAlert class="w-4 h-4 mt-0.5 shrink-0" />
-        <span>{{ error }}</span>
-      </div>
+      <ErrorBanner :message="error" />
     </form>
   </div>
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { createATPDoc, useEmployees, useAreas } from '@/data/atp'
+import { reactive, toRef } from 'vue'
+import { createATPDoc, useEmployees, useAreas, ATP_DOCTYPE } from '@/data/atp'
+import { useEditableRows } from '@/composables/editableRows'
+import { useCreateForm } from '@/composables/createForm'
+import { nowDefaults } from '@/utils/format'
 import PageHeader from '@/components/PageHeader.vue'
 import SignaturePad from '@/components/SignaturePad.vue'
 import EmployeePicker from '@/components/EmployeePicker.vue'
+import ErrorBanner from '@/components/ErrorBanner.vue'
 import IconPlus from '~icons/lucide/plus'
 import IconTrash from '~icons/lucide/trash-2'
 import IconCheck from '~icons/lucide/check'
 import IconLoader from '~icons/lucide/loader-circle'
 import IconAlert from '~icons/lucide/alert-circle'
 
-const router = useRouter()
 const employees = useEmployees()
 const areas = useAreas()
-
-const now = new Date()
-const yyyy = now.getFullYear()
-const mm = String(now.getMonth() + 1).padStart(2, '0')
-const dd = String(now.getDate()).padStart(2, '0')
-const hh = String(now.getHours()).padStart(2, '0')
-const mi = String(now.getMinutes()).padStart(2, '0')
+const now = nowDefaults()
 
 const form = reactive({
-  doctype: 'QC Lavado de Manos ATP',
-  fecha_inspeccion: `${yyyy}-${mm}-${dd}`,
-  hora_inspeccion: `${hh}:${mi}:00`,
+  doctype: ATP_DOCTYPE,
+  fecha_inspeccion: now.date,
+  hora_inspeccion: now.time,
   supervisor_firma: '',
   coordinador_firma: '',
   atp_detalle: [],
 })
 
-const saving = ref(false)
-const error = ref('')
-
-function addRow() {
-  form.atp_detalle.unshift({
+const {
+  addRow,
+  removeRow,
+  duplicateValues,
+  isDuplicate,
+  availableFor,
+  serializeRows,
+} = useEditableRows(toRef(form, 'atp_detalle'), {
+  uniqueBy: 'codigo_empleado',
+  makeRow: () => ({
     codigo_empleado: '',
+    nombre_empleado: '',
     area: '',
     atp_resultado: null,
     cumplimiento: 'Conforme',
     acciones_correctivas: '',
-  })
-}
-
-function removeRow(i) {
-  form.atp_detalle.splice(i, 1)
-}
-
-const duplicateCodes = computed(() => {
-  const counts = {}
-  for (const row of form.atp_detalle) {
-    if (row.codigo_empleado) {
-      counts[row.codigo_empleado] = (counts[row.codigo_empleado] || 0) + 1
-    }
-  }
-  return new Set(
-    Object.entries(counts)
-      .filter(([, n]) => n > 1)
-      .map(([code]) => code)
-  )
+  }),
 })
 
-function isDuplicate(row) {
-  return duplicateCodes.value.has(row.codigo_empleado)
-}
-
-function availableEmployeesFor(currentIndex) {
-  const selectedElsewhere = new Set()
-  form.atp_detalle.forEach((row, i) => {
-    if (i !== currentIndex && row.codigo_empleado) {
-      selectedElsewhere.add(row.codigo_empleado)
-    }
-  })
-  return (employees.data || []).filter(
-    (emp) => !selectedElsewhere.has(emp.name)
-  )
+function onEmployeeChange(row, emp) {
+  row.nombre_empleado = emp?.employee_name || ''
 }
 
 const create = createATPDoc()
 
-async function onSubmit() {
-  if (!form.atp_detalle.length) {
-    error.value = 'Agrega al menos un empleado.'
-    return
-  }
-  for (const row of form.atp_detalle) {
-    if (!row.codigo_empleado) {
-      error.value = 'Selecciona un empleado en todas las filas.'
-      return
+const { saving, error, onSubmit } = useCreateForm({
+  create,
+  redirect: '/atp',
+  validate() {
+    if (!form.atp_detalle.length) return 'Agrega al menos un empleado.'
+    for (const row of form.atp_detalle) {
+      if (!row.codigo_empleado)
+        return 'Selecciona un empleado en todas las filas.'
     }
-  }
-  if (duplicateCodes.value.size > 0) {
-    error.value =
-      'Hay empleados repetidos en la inspección. Cada empleado solo puede aparecer una vez.'
-    return
-  }
-  error.value = ''
-  saving.value = true
-  try {
-    await create.submit(form)
-    router.push('/atp')
-  } catch (e) {
-    error.value = e.message || 'Error al guardar.'
-  } finally {
-    saving.value = false
-  }
-}
+    if (duplicateValues.value.size > 0)
+      return 'Hay empleados repetidos en la inspección. Cada empleado solo puede aparecer una vez.'
+  },
+  buildDoc: () => ({ ...form, atp_detalle: serializeRows() }),
+})
 
 addRow()
 </script>

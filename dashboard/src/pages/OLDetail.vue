@@ -7,7 +7,7 @@
     >
       <template #actions>
         <a
-          :href="deskUrl"
+          :href="docUrl"
           target="_blank"
           rel="noopener"
           class="btn-secondary"
@@ -38,13 +38,7 @@
       </template>
     </PageHeader>
 
-    <div
-      v-if="doc.loading && !doc.doc"
-      class="px-4 sm:px-6 lg:px-10 py-16 text-center text-gray-500 text-sm"
-    >
-      <IconLoader class="w-5 h-5 mx-auto animate-spin mb-2" />
-      Cargando…
-    </div>
+    <LoadingCard v-if="doc.loading && !doc.doc" class="m-6 lg:mx-10" />
 
     <div v-else-if="doc.error" class="px-4 sm:px-6 lg:px-10 py-12 text-center">
       <div class="text-red-600 text-sm mb-3">
@@ -63,20 +57,9 @@
       v-else-if="doc.doc"
       class="px-4 sm:px-6 lg:px-10 py-6 max-w-5xl space-y-5"
     >
-      <div class="flex items-center gap-3 flex-wrap">
-        <span class="badge" :class="docstatusClass(doc.doc.docstatus)">
-          <span
-            class="w-1.5 h-1.5 rounded-full"
-            :class="dotClass(doc.doc.docstatus)"
-          />
-          {{ docstatusLabel(doc.doc.docstatus) }}
-        </span>
-        <span class="text-xs text-gray-500">
-          Modificado {{ formatDateTime(doc.doc.modified) }}
-        </span>
-        <span class="text-xs text-gray-400">·</span>
-        <span class="text-xs text-gray-500">por {{ doc.doc.modified_by }}</span>
-      </div>
+      <DocMetaLine :doc="doc.doc" />
+
+      <ErrorBanner :message="actionError" />
 
       <section class="card p-5">
         <div class="flex items-start justify-between flex-wrap gap-4">
@@ -178,9 +161,9 @@
               </div>
               <div
                 class="text-sm font-semibold tabular-nums"
-                :class="rowScoreColor(row)"
+                :class="scoreColor(rowAverage(row))"
               >
-                {{ rowAvg(row).toFixed(1) }}%
+                {{ rowAverage(row).toFixed(1) }}%
               </div>
             </div>
           </div>
@@ -218,17 +201,11 @@
           >
             <div v-if="row.observaciones">
               <div class="field-label">Observaciones</div>
-              <div
-                class="text-sm text-gray-700 prose prose-sm max-w-none"
-                v-html="row.observaciones"
-              />
+              <div class="text-sm text-gray-700 whitespace-pre-wrap">{{ row.observaciones }}</div>
             </div>
             <div v-if="row.acciones_correctivas">
               <div class="field-label">Acciones correctivas</div>
-              <div
-                class="text-sm text-gray-700 prose prose-sm max-w-none"
-                v-html="row.acciones_correctivas"
-              />
+              <div class="text-sm text-gray-700 whitespace-pre-wrap">{{ row.acciones_correctivas }}</div>
             </div>
             <div v-if="row.fecha_cierre">
               <div class="field-label">Fecha de cierre</div>
@@ -288,17 +265,7 @@
         </div>
       </section>
 
-      <p class="text-xs text-gray-500">
-        Para editar este documento, abrí
-        <a
-          :href="deskUrl"
-          target="_blank"
-          rel="noopener"
-          class="text-blue-600 hover:underline"
-        >
-          en Desk </a
-        >.
-      </p>
+      <DeskEditNote :href="docUrl" />
     </div>
   </div>
 </template>
@@ -306,15 +273,19 @@
 <script setup>
 import { computed } from 'vue'
 import {
-  useOLDoc,
-  submitOLDoc,
-  cancelOLDoc,
+  limpiezaResources,
   LIMPIEZA_CRITERIA as CRITERIA,
   rowAverage,
   rowSummary,
 } from '@/data/limpieza'
-import { useConfirm } from '@/composables/confirm'
+import { useDocActions } from '@/composables/docActions'
+import { formatDate, formatTime } from '@/utils/format'
+import { conformidadClass, deskUrl, scoreColor } from '@/utils/docstatus'
 import PageHeader from '@/components/PageHeader.vue'
+import LoadingCard from '@/components/LoadingCard.vue'
+import ErrorBanner from '@/components/ErrorBanner.vue'
+import DocMetaLine from '@/components/DocMetaLine.vue'
+import DeskEditNote from '@/components/DeskEditNote.vue'
 import IconCheck from '~icons/lucide/check'
 import IconX from '~icons/lucide/x'
 import IconLoader from '~icons/lucide/loader-circle'
@@ -324,10 +295,12 @@ const props = defineProps({
   name: { type: String, required: true },
 })
 
-const doc = useOLDoc(props.name)
-const submitter = submitOLDoc()
-const canceler = cancelOLDoc()
-const confirm = useConfirm()
+const { doc, submitter, canceler, actionError, onSubmit, onCancel } =
+  useDocActions({
+    resources: limpiezaResources,
+    name: props.name,
+    entity: { articulo: 'la inspección', enviadaLabel: 'enviada' },
+  })
 
 const rows = computed(() => doc.doc?.listado_areas || [])
 
@@ -345,111 +318,14 @@ const totalNumber = computed(() => {
 
 const totalColor = computed(() => {
   if (!rows.value.length) return 'text-gray-400'
-  const v = totalNumber.value
-  if (v >= 90) return 'text-green-700'
-  if (v >= 70) return 'text-yellow-700'
-  return 'text-red-700'
+  return scoreColor(totalNumber.value)
 })
 
-const deskUrl = computed(
-  () => `/app/qc-orden-y-limpieza/${encodeURIComponent(props.name)}`
-)
-
-function rowAvg(row) {
-  return rowAverage(row)
-}
-function rowScoreColor(row) {
-  const v = rowAverage(row)
-  if (v >= 90) return 'text-green-700'
-  if (v >= 70) return 'text-yellow-700'
-  return 'text-red-700'
-}
-
-function conformidadClass(v) {
-  if (v === 'Conforme') return 'badge-green'
-  if (v === 'No Conforme') return 'badge-red'
-  return 'badge-gray'
-}
+const docUrl = computed(() => deskUrl('qc-orden-y-limpieza', props.name))
 
 function formatScore(v) {
   const n = Number(v)
   if (!Number.isFinite(n)) return '0'
   return n.toFixed(0)
-}
-
-function docstatusLabel(s) {
-  if (s === 1) return 'Enviado'
-  if (s === 2) return 'Cancelado'
-  return 'Borrador'
-}
-function docstatusClass(s) {
-  if (s === 1) return 'badge-green'
-  if (s === 2) return 'badge-red'
-  return 'badge-yellow'
-}
-function dotClass(s) {
-  if (s === 1) return 'bg-green-500'
-  if (s === 2) return 'bg-red-500'
-  return 'bg-yellow-500'
-}
-function formatDate(d) {
-  if (!d) return '—'
-  const [y, m, day] = String(d).split('-')
-  if (!y || !m || !day) return d
-  return `${day}/${m}/${y}`
-}
-function formatTime(t) {
-  if (!t) return '—'
-  return String(t).slice(0, 5)
-}
-function formatDateTime(s) {
-  if (!s) return ''
-  try {
-    return new Date(s).toLocaleString('es', {
-      dateStyle: 'short',
-      timeStyle: 'short',
-    })
-  } catch {
-    return s
-  }
-}
-
-async function onSubmit() {
-  const ok = await confirm({
-    title: '¿Enviar la inspección?',
-    message:
-      'Una vez enviada, el documento queda firme y no podrá modificarse después.',
-    confirmText: 'Enviar',
-    cancelText: 'Volver',
-    variant: 'primary',
-  })
-  if (!ok) return
-  try {
-    await submitter.submit(doc.doc)
-    await doc.reload()
-  } catch (e) {
-    alert(e.messages?.[0] || e.message || 'Error al enviar.')
-  }
-}
-
-async function onCancel() {
-  const ok = await confirm({
-    title: '¿Cancelar la inspección?',
-    message:
-      'Esta acción no se puede deshacer. El documento quedará marcado como cancelado.',
-    confirmText: 'Sí, cancelar',
-    cancelText: 'Volver',
-    variant: 'danger',
-  })
-  if (!ok) return
-  try {
-    await canceler.submit({
-      doctype: doc.doc.doctype,
-      name: doc.doc.name,
-    })
-    await doc.reload()
-  } catch (e) {
-    alert(e.messages?.[0] || e.message || 'Error al cancelar.')
-  }
 }
 </script>

@@ -1,8 +1,4 @@
-import {
-  createListResource,
-  createResource,
-  createDocumentResource,
-} from 'frappe-ui'
+import { makeDocResources } from './common'
 
 const DOCTYPE = 'QC Paros de Produccion'
 
@@ -32,64 +28,24 @@ export function paroStatusClass(s) {
   return 'badge-gray'
 }
 
-export function useParoList() {
-  return createListResource({
-    doctype: DOCTYPE,
-    fields: [
-      'name',
-      'qc_producto',
-      'itemname',
-      'docdate',
-      'hora',
-      'status',
-      'docstatus',
-    ],
-    orderBy: 'docdate desc, hora desc',
-    pageLength: 20,
-    auto: true,
-  })
-}
+const paros = makeDocResources(DOCTYPE, {
+  fields: [
+    'name',
+    'qc_producto',
+    'itemname',
+    'docdate',
+    'hora',
+    'status',
+    'docstatus',
+  ],
+  orderBy: 'docdate desc, hora desc',
+})
 
-export function useParoDoc(name) {
-  return createDocumentResource({
-    doctype: DOCTYPE,
-    name,
-    auto: true,
-  })
-}
+export const paroResources = paros
 
-export function createParoDoc() {
-  return createResource({
-    url: 'frappe.client.insert',
-    makeParams(values) {
-      return { doc: values }
-    },
-  })
-}
-
-export function saveParoDoc() {
-  return createResource({
-    url: 'frappe.client.save',
-    makeParams(doc) {
-      return { doc }
-    },
-  })
-}
-
-export function submitParoDoc() {
-  return createResource({
-    url: 'frappe.client.submit',
-    makeParams(doc) {
-      return { doc }
-    },
-  })
-}
-
-export function cancelParoDoc() {
-  return createResource({
-    url: 'frappe.client.cancel',
-    makeParams({ doctype, name }) {
-      return { doctype, name }
-    },
-  })
-}
+export const useParoList = (opts) => paros.useList(opts)
+export const useParoDoc = (name) => paros.useDoc(name)
+export const createParoDoc = () => paros.create()
+export const saveParoDoc = () => paros.save()
+export const submitParoDoc = () => paros.submit()
+export const cancelParoDoc = () => paros.cancel()

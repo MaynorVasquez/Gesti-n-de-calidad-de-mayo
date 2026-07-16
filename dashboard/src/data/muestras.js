@@ -1,95 +1,33 @@
-import {
-  createListResource,
-  createResource,
-  createDocumentResource,
-} from 'frappe-ui'
+import { makeDocResources } from './common'
+import { useProductosAbiertos, fetchTemplate } from './lookups'
 
 const DOCTYPE = 'QC Producto Muestra'
 
 export const MUESTRA_DOCTYPE = DOCTYPE
 
-export function useMuestraList() {
-  return createListResource({
-    doctype: DOCTYPE,
-    fields: [
-      'name',
-      'qc_producto',
-      'itemname',
-      'batchnum',
-      'docdate',
-      'hora_muestra',
-      'docstatus',
-    ],
-    orderBy: 'docdate desc, hora_muestra desc',
-    pageLength: 20,
-    auto: true,
-  })
-}
+const muestras = makeDocResources(DOCTYPE, {
+  fields: [
+    'name',
+    'qc_producto',
+    'itemname',
+    'batchnum',
+    'docdate',
+    'hora_muestra',
+    'docstatus',
+  ],
+  orderBy: 'docdate desc, hora_muestra desc',
+})
 
-export function useMuestraDoc(name) {
-  return createDocumentResource({
-    doctype: DOCTYPE,
-    name,
-    auto: true,
-  })
-}
+export const muestraResources = muestras
 
-export function createMuestraDoc() {
-  return createResource({
-    url: 'frappe.client.insert',
-    makeParams(values) {
-      return { doc: values }
-    },
-  })
-}
+export const useMuestraList = (opts) => muestras.useList(opts)
+export const useMuestraDoc = (name) => muestras.useDoc(name)
+export const createMuestraDoc = () => muestras.create()
+export const saveMuestraDoc = () => muestras.save()
+export const submitMuestraDoc = () => muestras.submit()
+export const cancelMuestraDoc = () => muestras.cancel()
 
-export function saveMuestraDoc() {
-  return createResource({
-    url: 'frappe.client.save',
-    makeParams(doc) {
-      return { doc }
-    },
-  })
-}
-
-export function submitMuestraDoc() {
-  return createResource({
-    url: 'frappe.client.submit',
-    makeParams(doc) {
-      return { doc }
-    },
-  })
-}
-
-export function cancelMuestraDoc() {
-  return createResource({
-    url: 'frappe.client.cancel',
-    makeParams({ doctype, name }) {
-      return { doctype, name }
-    },
-  })
-}
-
-// QC Productos en estado "Abierto" (los únicos que aceptan muestras)
-export function useProductosAbiertos() {
-  return createListResource({
-    doctype: 'QC Producto',
-    fields: ['name', 'itemname', 'qc_template', 'docdate'],
-    filters: { status: 'Abierto' },
-    orderBy: 'modified desc',
-    pageLength: 100,
-    auto: true,
-  })
-}
-
-export function fetchTemplate() {
-  return createResource({
-    url: 'frappe.client.get',
-    makeParams(name) {
-      return { doctype: 'QC Template', name }
-    },
-  })
-}
+export { useProductosAbiertos, fetchTemplate }
 
 export function newDetalleRow(item = {}) {
   return {

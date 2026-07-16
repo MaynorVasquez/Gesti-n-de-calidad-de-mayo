@@ -96,4 +96,11 @@ body {
   .field-label {
     @apply block text-xs font-medium text-gray-600 mb-1;
   }
+
+  .thead-row {
+    @apply bg-gray-50 text-left text-xs uppercase tracking-wider text-gray-500;
+  }
+  .th {
+    @apply px-4 py-2.5 font-medium;
+  }
 }

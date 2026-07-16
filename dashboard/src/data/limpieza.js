@@ -1,8 +1,5 @@
-import {
-  createListResource,
-  createResource,
-  createDocumentResource,
-} from 'frappe-ui'
+import { makeDocResources } from './common'
+import { useAreas } from './lookups'
 
 const DOCTYPE = 'QC Orden y Limpieza'
 const TABLE_FIELD = 'listado_areas'
@@ -66,64 +63,24 @@ export function totalAverage(rows) {
   return sum / rows.length
 }
 
-export function useOLList() {
-  return createListResource({
-    doctype: DOCTYPE,
-    fields: [
-      'name',
-      'fecha_inspeccion',
-      'hora_inspeccion',
-      'full_user_name',
-      'total',
-      'docstatus',
-    ],
-    orderBy: 'fecha_inspeccion desc, hora_inspeccion desc',
-    pageLength: 20,
-    auto: true,
-  })
-}
+const limpieza = makeDocResources(DOCTYPE, {
+  fields: [
+    'name',
+    'fecha_inspeccion',
+    'hora_inspeccion',
+    'full_user_name',
+    'total',
+    'docstatus',
+  ],
+  orderBy: 'fecha_inspeccion desc, hora_inspeccion desc',
+})
 
-export function useOLDoc(name) {
-  return createDocumentResource({
-    doctype: DOCTYPE,
-    name,
-    auto: true,
-  })
-}
+export const limpiezaResources = limpieza
 
-export function createOLDoc() {
-  return createResource({
-    url: 'frappe.client.insert',
-    makeParams(values) {
-      return { doc: values }
-    },
-  })
-}
+export const useOLList = (opts) => limpieza.useList(opts)
+export const useOLDoc = (name) => limpieza.useDoc(name)
+export const createOLDoc = () => limpieza.create()
+export const submitOLDoc = () => limpieza.submit()
+export const cancelOLDoc = () => limpieza.cancel()
 
-export function submitOLDoc() {
-  return createResource({
-    url: 'frappe.client.submit',
-    makeParams(doc) {
-      return { doc }
-    },
-  })
-}
-
-export function cancelOLDoc() {
-  return createResource({
-    url: 'frappe.client.cancel',
-    makeParams({ doctype, name }) {
-      return { doctype, name }
-    },
-  })
-}
-
-export function useAreasWithDept() {
-  return createListResource({
-    doctype: 'QC Area de limpieza',
-    fields: ['name', 'departamento'],
-    pageLength: 200,
-    orderBy: 'name asc',
-    auto: true,
-  })
-}
+export const useAreasWithDept = () => useAreas(['name', 'departamento'])

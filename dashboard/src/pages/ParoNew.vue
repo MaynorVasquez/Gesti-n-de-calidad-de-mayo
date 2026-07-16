@@ -8,10 +8,10 @@
       <template #actions>
         <router-link to="/paros" class="btn-secondary">Cancelar</router-link>
         <button
-          type="button"
+          type="submit"
+          form="paro-new-form"
           class="btn-primary"
           :disabled="saving"
-          @click="onSubmit"
         >
           <IconLoader v-if="saving" class="w-4 h-4 animate-spin" />
           <IconCheck v-else class="w-4 h-4" />
@@ -21,6 +21,7 @@
     </PageHeader>
 
     <form
+      id="paro-new-form"
       @submit.prevent="onSubmit"
       class="px-4 sm:px-6 lg:px-10 py-6 max-w-3xl space-y-5"
     >
@@ -88,55 +89,48 @@
         />
       </section>
 
-      <div
-        v-if="error"
-        class="card p-3 border-red-200 bg-red-50 text-red-700 text-sm flex items-start gap-2"
-      >
-        <IconAlert class="w-4 h-4 mt-0.5 shrink-0" />
-        <span>{{ error }}</span>
-      </div>
+      <ErrorBanner
+        :message="
+          productos.list.error
+            ? 'No se pudieron cargar los controles de calidad abiertos. Recarga la página para intentar de nuevo.'
+            : ''
+        "
+      />
+
+      <ErrorBanner :message="error" />
     </form>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive } from 'vue'
 import {
   PARO_DOCTYPE,
   PARO_STATUSES,
   paroStatusLabel,
   createParoDoc,
 } from '@/data/paros'
-import { useProductosAbiertos } from '@/data/muestras'
+import { useProductosAbiertos } from '@/data/lookups'
+import { useCreateForm } from '@/composables/createForm'
+import { nowDefaults } from '@/utils/format'
 import PageHeader from '@/components/PageHeader.vue'
+import ErrorBanner from '@/components/ErrorBanner.vue'
 import IconCheck from '~icons/lucide/check'
 import IconLoader from '~icons/lucide/loader-circle'
-import IconAlert from '~icons/lucide/alert-circle'
 
-const router = useRouter()
 const productos = useProductosAbiertos()
-
-const now = new Date()
-const yyyy = now.getFullYear()
-const mm = String(now.getMonth() + 1).padStart(2, '0')
-const dd = String(now.getDate()).padStart(2, '0')
-const hh = String(now.getHours()).padStart(2, '0')
-const mi = String(now.getMinutes()).padStart(2, '0')
+const now = nowDefaults()
 
 const form = reactive({
   doctype: PARO_DOCTYPE,
   qc_producto: '',
   itemname: '',
   itemcode: '',
-  docdate: `${yyyy}-${mm}-${dd}`,
-  hora: `${hh}:${mi}:00`,
+  docdate: now.date,
+  hora: now.time,
   status: 'Draft',
   comentarios: '',
 })
-
-const saving = ref(false)
-const error = ref('')
 
 function onProductoChange() {
   error.value = ''
@@ -147,24 +141,15 @@ function onProductoChange() {
 
 const create = createParoDoc()
 
-async function onSubmit() {
-  if (!form.qc_producto) {
-    error.value = 'Selecciona el control de calidad del producto.'
-    return
-  }
-  if (!form.comentarios.trim()) {
-    error.value = 'Describe el motivo del paro de producción.'
-    return
-  }
-  error.value = ''
-  saving.value = true
-  try {
-    const doc = await create.submit(form)
-    router.push(`/paros/${encodeURIComponent(doc.name)}`)
-  } catch (e) {
-    error.value = e.messages?.[0] || e.message || 'Error al guardar.'
-  } finally {
-    saving.value = false
-  }
-}
+const { saving, error, onSubmit } = useCreateForm({
+  create,
+  redirect: (doc) => `/paros/${encodeURIComponent(doc.name)}`,
+  validate() {
+    if (!form.qc_producto)
+      return 'Selecciona el control de calidad del producto.'
+    if (!form.comentarios.trim())
+      return 'Describe el motivo del paro de producción.'
+  },
+  buildDoc: () => ({ ...form }),
+})
 </script>

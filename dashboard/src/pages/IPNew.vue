@@ -8,10 +8,10 @@
       <template #actions>
         <router-link to="/personal" class="btn-secondary">Cancelar</router-link>
         <button
-          type="button"
+          type="submit"
+          form="ip-new-form"
           class="btn-primary"
           :disabled="saving"
-          @click="onSubmit"
         >
           <IconLoader v-if="saving" class="w-4 h-4 animate-spin" />
           <IconCheck v-else class="w-4 h-4" />
@@ -21,6 +21,7 @@
     </PageHeader>
 
     <form
+      id="ip-new-form"
       @submit.prevent="onSubmit"
       class="px-4 sm:px-6 lg:px-10 py-6 max-w-5xl space-y-5"
     >
@@ -71,7 +72,7 @@
 
         <div
           v-for="(row, i) in form.table_nnkn"
-          :key="i"
+          :key="row._key"
           class="card overflow-hidden"
         >
           <div
@@ -85,11 +86,11 @@
             <div class="flex-1 min-w-0">
               <EmployeePicker
                 v-model="row.codigo_empleado"
-                :employees="availableEmployeesFor(i)"
+                :employees="availableFor(i, employees.data)"
                 :invalid="isDuplicate(row)"
                 required
                 placeholder="Buscar empleado por nombre o código…"
-                @change="onEmployeeChange(row)"
+                @change="(emp) => onEmployeeChange(row, emp)"
               />
             </div>
             <select v-model="row.estado" class="select w-32 text-sm">
@@ -171,31 +172,29 @@
         </div>
       </section>
 
-      <div
-        v-if="error"
-        class="card p-3 border-red-200 bg-red-50 text-red-700 text-sm flex items-start gap-2"
-      >
-        <IconAlert class="w-4 h-4 mt-0.5 shrink-0" />
-        <span>{{ error }}</span>
-      </div>
+      <ErrorBanner :message="error" />
     </form>
   </div>
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, toRef } from 'vue'
 import {
   createIPDoc,
   useEmployees,
   PERSONAL_CRITERIA as CRITERIA,
+  PERSONAL_DOCTYPE,
   newPersonalRow,
   rowConformity,
 } from '@/data/personal'
+import { useEditableRows } from '@/composables/editableRows'
+import { useCreateForm } from '@/composables/createForm'
+import { nowDefaults } from '@/utils/format'
 import PageHeader from '@/components/PageHeader.vue'
 import SignaturePad from '@/components/SignaturePad.vue'
 import ConformidadToggle from '@/components/ConformidadToggle.vue'
 import EmployeePicker from '@/components/EmployeePicker.vue'
+import ErrorBanner from '@/components/ErrorBanner.vue'
 import IconPlus from '~icons/lucide/plus'
 import IconTrash from '~icons/lucide/trash-2'
 import IconCheck from '~icons/lucide/check'
@@ -203,38 +202,31 @@ import IconLoader from '~icons/lucide/loader-circle'
 import IconAlert from '~icons/lucide/alert-circle'
 import IconUsers from '~icons/lucide/users'
 
-const router = useRouter()
 const employees = useEmployees()
-
-const now = new Date()
-const yyyy = now.getFullYear()
-const mm = String(now.getMonth() + 1).padStart(2, '0')
-const dd = String(now.getDate()).padStart(2, '0')
-const hh = String(now.getHours()).padStart(2, '0')
-const mi = String(now.getMinutes()).padStart(2, '0')
+const now = nowDefaults()
 
 const form = reactive({
-  doctype: 'QC Inspeccion de Personal',
-  fecha_inspeccion: `${yyyy}-${mm}-${dd}`,
-  hora_inspeccion: `${hh}:${mi}:00`,
+  doctype: PERSONAL_DOCTYPE,
+  fecha_inspeccion: now.date,
+  hora_inspeccion: now.time,
   supervidor_firma: '',
   coordinador_firma: '',
   table_nnkn: [],
 })
 
-const saving = ref(false)
-const error = ref('')
+const {
+  addRow,
+  removeRow,
+  duplicateValues,
+  isDuplicate,
+  availableFor,
+  serializeRows,
+} = useEditableRows(toRef(form, 'table_nnkn'), {
+  uniqueBy: 'codigo_empleado',
+  makeRow: newPersonalRow,
+})
 
-function addRow() {
-  form.table_nnkn.unshift(newPersonalRow())
-}
-
-function removeRow(i) {
-  form.table_nnkn.splice(i, 1)
-}
-
-function onEmployeeChange(row) {
-  const emp = (employees.data || []).find((e) => e.name === row.codigo_empleado)
+function onEmployeeChange(row, emp) {
   row.nombre_empleado = emp?.employee_name || ''
 }
 
@@ -242,65 +234,23 @@ function rowSummary(row) {
   return rowConformity(row)
 }
 
-const duplicateCodes = computed(() => {
-  const counts = {}
-  for (const row of form.table_nnkn) {
-    if (row.codigo_empleado) {
-      counts[row.codigo_empleado] = (counts[row.codigo_empleado] || 0) + 1
-    }
-  }
-  return new Set(
-    Object.entries(counts)
-      .filter(([, n]) => n > 1)
-      .map(([code]) => code)
-  )
-})
-
-function isDuplicate(row) {
-  return duplicateCodes.value.has(row.codigo_empleado)
-}
-
-function availableEmployeesFor(currentIndex) {
-  const selectedElsewhere = new Set()
-  form.table_nnkn.forEach((row, i) => {
-    if (i !== currentIndex && row.codigo_empleado) {
-      selectedElsewhere.add(row.codigo_empleado)
-    }
-  })
-  return (employees.data || []).filter(
-    (emp) => !selectedElsewhere.has(emp.name)
-  )
-}
-
 const create = createIPDoc()
 
-async function onSubmit() {
-  if (!form.table_nnkn.length) {
-    error.value = 'Agregá al menos un empleado para inspeccionar.'
-    return
-  }
-  for (const row of form.table_nnkn) {
-    if (!row.codigo_empleado) {
-      error.value = 'Selecciona un empleado en todas las filas.'
-      return
+const { saving, error, onSubmit } = useCreateForm({
+  create,
+  redirect: '/personal',
+  validate() {
+    if (!form.table_nnkn.length)
+      return 'Agregá al menos un empleado para inspeccionar.'
+    for (const row of form.table_nnkn) {
+      if (!row.codigo_empleado)
+        return 'Selecciona un empleado en todas las filas.'
     }
-  }
-  if (duplicateCodes.value.size > 0) {
-    error.value =
-      'Hay empleados repetidos en la inspección. Cada empleado solo puede aparecer una vez.'
-    return
-  }
-  error.value = ''
-  saving.value = true
-  try {
-    await create.submit(form)
-    router.push('/personal')
-  } catch (e) {
-    error.value = e.messages?.[0] || e.message || 'Error al guardar.'
-  } finally {
-    saving.value = false
-  }
-}
+    if (duplicateValues.value.size > 0)
+      return 'Hay empleados repetidos en la inspección. Cada empleado solo puede aparecer una vez.'
+  },
+  buildDoc: () => ({ ...form, table_nnkn: serializeRows() }),
+})
 
 addRow()
 </script>

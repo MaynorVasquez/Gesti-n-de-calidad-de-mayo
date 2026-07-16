@@ -1,9 +1,5 @@
-import {
-  createListResource,
-  createResource,
-  createDocumentResource,
-} from 'frappe-ui'
-import { useEmployees } from './atp'
+import { makeDocResources } from './common'
+import { useEmployees } from './lookups'
 
 const DOCTYPE = 'QC Inspeccion de Personal'
 const TABLE_FIELD = 'table_nnkn'
@@ -23,20 +19,14 @@ export const PERSONAL_CRITERIA = [
 ]
 
 export function newPersonalRow(emp = {}) {
-  return {
+  const row = {
     codigo_empleado: emp.name || '',
     nombre_empleado: emp.employee_name || '',
     estado: 'Activo',
-    manos_limpias: 'Conforme',
-    ulc: 'Conforme',
-    barba: 'Conforme',
-    uniforme_limpio: 'Conforme',
-    redecilla: 'Conforme',
-    mascarilla: 'Conforme',
-    maquillaje: 'Conforme',
-    joyeria: 'Conforme',
     oac: '',
   }
+  for (const c of PERSONAL_CRITERIA) row[c.key] = 'Conforme'
+  return row
 }
 
 export function rowConformity(row) {
@@ -55,55 +45,23 @@ export function rowConformity(row) {
   }
 }
 
-export function useIPList() {
-  return createListResource({
-    doctype: DOCTYPE,
-    fields: [
-      'name',
-      'fecha_inspeccion',
-      'hora_inspeccion',
-      'supervisor',
-      'docstatus',
-    ],
-    orderBy: 'fecha_inspeccion desc, hora_inspeccion desc',
-    pageLength: 20,
-    auto: true,
-  })
-}
+const personal = makeDocResources(DOCTYPE, {
+  fields: [
+    'name',
+    'fecha_inspeccion',
+    'hora_inspeccion',
+    'supervisor',
+    'docstatus',
+  ],
+  orderBy: 'fecha_inspeccion desc, hora_inspeccion desc',
+})
 
-export function useIPDoc(name) {
-  return createDocumentResource({
-    doctype: DOCTYPE,
-    name,
-    auto: true,
-  })
-}
+export const personalResources = personal
 
-export function createIPDoc() {
-  return createResource({
-    url: 'frappe.client.insert',
-    makeParams(values) {
-      return { doc: values }
-    },
-  })
-}
-
-export function submitIPDoc() {
-  return createResource({
-    url: 'frappe.client.submit',
-    makeParams(doc) {
-      return { doc }
-    },
-  })
-}
-
-export function cancelIPDoc() {
-  return createResource({
-    url: 'frappe.client.cancel',
-    makeParams({ doctype, name }) {
-      return { doctype, name }
-    },
-  })
-}
+export const useIPList = (opts) => personal.useList(opts)
+export const useIPDoc = (name) => personal.useDoc(name)
+export const createIPDoc = () => personal.create()
+export const submitIPDoc = () => personal.submit()
+export const cancelIPDoc = () => personal.cancel()
 
 export { useEmployees }

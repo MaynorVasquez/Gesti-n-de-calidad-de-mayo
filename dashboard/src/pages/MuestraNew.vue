@@ -8,10 +8,10 @@
       <template #actions>
         <router-link to="/muestras" class="btn-secondary">Cancelar</router-link>
         <button
-          type="button"
+          type="submit"
+          form="muestra-new-form"
           class="btn-primary"
           :disabled="saving"
-          @click="onSubmit"
         >
           <IconLoader v-if="saving" class="w-4 h-4 animate-spin" />
           <IconArrowRight v-else class="w-4 h-4" />
@@ -21,6 +21,7 @@
     </PageHeader>
 
     <form
+      id="muestra-new-form"
       @submit.prevent="onSubmit"
       class="px-4 sm:px-6 lg:px-10 py-6 max-w-3xl space-y-5"
     >
@@ -101,40 +102,36 @@
         </span>
       </div>
 
-      <div
-        v-if="error"
-        class="card p-3 border-red-200 bg-red-50 text-red-700 text-sm flex items-start gap-2"
-      >
-        <IconAlert class="w-4 h-4 mt-0.5 shrink-0" />
-        <span>{{ error }}</span>
-      </div>
+      <ErrorBanner
+        :message="
+          productos.list.error
+            ? 'No se pudieron cargar los controles de calidad abiertos. Recarga la página para intentar de nuevo.'
+            : ''
+        "
+      />
+
+      <ErrorBanner :message="error" />
     </form>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive } from 'vue'
 import {
   MUESTRA_DOCTYPE,
   createMuestraDoc,
   useProductosAbiertos,
 } from '@/data/muestras'
+import { useCreateForm } from '@/composables/createForm'
+import { nowDefaults } from '@/utils/format'
 import PageHeader from '@/components/PageHeader.vue'
+import ErrorBanner from '@/components/ErrorBanner.vue'
 import IconLoader from '~icons/lucide/loader-circle'
-import IconAlert from '~icons/lucide/alert-circle'
 import IconArrowRight from '~icons/lucide/arrow-right'
 import IconInfo from '~icons/lucide/info'
 
-const router = useRouter()
 const productos = useProductosAbiertos()
-
-const now = new Date()
-const yyyy = now.getFullYear()
-const mm = String(now.getMonth() + 1).padStart(2, '0')
-const dd = String(now.getDate()).padStart(2, '0')
-const hh = String(now.getHours()).padStart(2, '0')
-const mi = String(now.getMinutes()).padStart(2, '0')
+const now = nowDefaults()
 
 const form = reactive({
   doctype: MUESTRA_DOCTYPE,
@@ -142,13 +139,10 @@ const form = reactive({
   itemname: '',
   itemcode: '',
   batchnum: '',
-  docdate: `${yyyy}-${mm}-${dd}`,
-  hora_muestra: `${hh}:${mi}:00`,
+  docdate: now.date,
+  hora_muestra: now.time,
   comentarios: '',
 })
-
-const saving = ref(false)
-const error = ref('')
 
 function onProductoChange() {
   error.value = ''
@@ -159,25 +153,15 @@ function onProductoChange() {
 
 const create = createMuestraDoc()
 
-async function onSubmit() {
-  if (!form.qc_producto) {
-    error.value = 'Selecciona el control de calidad del producto.'
-    return
-  }
-  if (!form.batchnum) {
-    error.value = 'Ingresa el número de lote.'
-    return
-  }
-  error.value = ''
-  saving.value = true
-  try {
-    // Al insertar, el servidor genera detalle_resultados desde la plantilla
-    const doc = await create.submit(form)
-    router.push(`/muestras/${encodeURIComponent(doc.name)}`)
-  } catch (e) {
-    error.value = e.messages?.[0] || e.message || 'Error al guardar.'
-  } finally {
-    saving.value = false
-  }
-}
+const { saving, error, onSubmit } = useCreateForm({
+  create,
+  // Al insertar, el servidor genera detalle_resultados desde la plantilla
+  redirect: (doc) => `/muestras/${encodeURIComponent(doc.name)}`,
+  validate() {
+    if (!form.qc_producto)
+      return 'Selecciona el control de calidad del producto.'
+    if (!form.batchnum) return 'Ingresa el número de lote.'
+  },
+  buildDoc: () => ({ ...form }),
+})
 </script>

@@ -25,7 +25,7 @@ function copyIndexHTMLToWWW() {
   }
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     vue(),
     Icons({ compiler: 'vue3' }),
@@ -36,7 +36,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: `/assets/${APP}/${SPA}/`,
+  // En dev, base '/' evita que los módulos de Vite caigan en el proxy de /assets
+  base: mode === 'development' ? '/' : `/assets/${APP}/${SPA}/`,
   optimizeDeps: {
     exclude: ['frappe-ui'],
     include: ['feather-icons', 'showdown', 'engine.io-client'],
@@ -62,4 +63,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))

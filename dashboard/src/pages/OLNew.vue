@@ -8,10 +8,10 @@
       <template #actions>
         <router-link to="/limpieza" class="btn-secondary">Cancelar</router-link>
         <button
-          type="button"
+          type="submit"
+          form="ol-new-form"
           class="btn-primary"
           :disabled="saving"
-          @click="onSubmit"
         >
           <IconLoader v-if="saving" class="w-4 h-4 animate-spin" />
           <IconCheck v-else class="w-4 h-4" />
@@ -21,6 +21,7 @@
     </PageHeader>
 
     <form
+      id="ol-new-form"
       @submit.prevent="onSubmit"
       class="px-4 sm:px-6 lg:px-10 py-6 max-w-5xl space-y-5"
     >
@@ -74,7 +75,7 @@
 
         <div
           v-for="(row, i) in form.listado_areas"
-          :key="i"
+          :key="row._key"
           class="card overflow-hidden"
         >
           <div
@@ -98,7 +99,7 @@
               >
                 <option value="">Seleccionar área…</option>
                 <option
-                  v-for="a in availableAreasFor(i)"
+                  v-for="a in availableFor(i, areas.data)"
                   :key="a.name"
                   :value="a.name"
                 >
@@ -122,7 +123,7 @@
             </span>
             <span
               class="font-semibold tabular-nums text-sm"
-              :class="rowScoreColor(row)"
+              :class="scoreColor(rowAverage(row))"
             >
               {{ rowAverage(row).toFixed(1) }}%
             </span>
@@ -235,31 +236,30 @@
         />
       </section>
 
-      <div
-        v-if="error"
-        class="card p-3 border-red-200 bg-red-50 text-red-700 text-sm flex items-start gap-2"
-      >
-        <IconAlert class="w-4 h-4 mt-0.5 shrink-0" />
-        <span>{{ error }}</span>
-      </div>
+      <ErrorBanner :message="error" />
     </form>
   </div>
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, reactive, toRef } from 'vue'
 import {
   createOLDoc,
   useAreasWithDept,
   LIMPIEZA_CRITERIA as CRITERIA,
+  LIMPIEZA_DOCTYPE,
   newLimpiezaRow,
   rowAverage,
   totalAverage,
 } from '@/data/limpieza'
+import { useEditableRows } from '@/composables/editableRows'
+import { useCreateForm } from '@/composables/createForm'
+import { nowDefaults } from '@/utils/format'
+import { scoreColor } from '@/utils/docstatus'
 import PageHeader from '@/components/PageHeader.vue'
 import SignaturePad from '@/components/SignaturePad.vue'
 import ConformidadToggle from '@/components/ConformidadToggle.vue'
+import ErrorBanner from '@/components/ErrorBanner.vue'
 import IconPlus from '~icons/lucide/plus'
 import IconTrash from '~icons/lucide/trash-2'
 import IconCheck from '~icons/lucide/check'
@@ -267,34 +267,28 @@ import IconLoader from '~icons/lucide/loader-circle'
 import IconAlert from '~icons/lucide/alert-circle'
 import IconSparkles from '~icons/lucide/sparkles'
 
-const router = useRouter()
 const areas = useAreasWithDept()
-
-const now = new Date()
-const yyyy = now.getFullYear()
-const mm = String(now.getMonth() + 1).padStart(2, '0')
-const dd = String(now.getDate()).padStart(2, '0')
-const hh = String(now.getHours()).padStart(2, '0')
-const mi = String(now.getMinutes()).padStart(2, '0')
+const now = nowDefaults()
 
 const form = reactive({
-  doctype: 'QC Orden y Limpieza',
-  fecha_inspeccion: `${yyyy}-${mm}-${dd}`,
-  hora_inspeccion: `${hh}:${mi}:00`,
+  doctype: LIMPIEZA_DOCTYPE,
+  fecha_inspeccion: now.date,
+  hora_inspeccion: now.time,
   firma_supervisor_calidad: '',
   listado_areas: [],
 })
 
-const saving = ref(false)
-const error = ref('')
-
-function addRow() {
-  form.listado_areas.unshift(newLimpiezaRow())
-}
-
-function removeRow(i) {
-  form.listado_areas.splice(i, 1)
-}
+const {
+  addRow,
+  removeRow,
+  duplicateValues,
+  isDuplicate,
+  availableFor,
+  serializeRows,
+} = useEditableRows(toRef(form, 'listado_areas'), {
+  uniqueBy: 'area',
+  makeRow: newLimpiezaRow,
+})
 
 function onAreaChange(row) {
   const a = (areas.data || []).find((x) => x.name === row.area)
@@ -302,9 +296,10 @@ function onAreaChange(row) {
 }
 
 function onConformidadChange(row, criterion, value) {
-  if (value === 'No Conforme' && (row[criterion.resultKey] === 100 || row[criterion.resultKey] == null)) {
-    row[criterion.resultKey] = 100
-  } else if (value !== 'No Conforme') {
+  // No Conforme parte de 0% (el inspector ajusta el real); Conforme vuelve a 100%
+  if (value === 'No Conforme') {
+    row[criterion.resultKey] = 0
+  } else {
     row[criterion.resultKey] = 100
   }
 }
@@ -313,72 +308,25 @@ const totalScore = computed(() => totalAverage(form.listado_areas))
 
 const totalColor = computed(() => {
   if (!form.listado_areas.length) return 'text-gray-400'
-  const v = totalScore.value
-  if (v >= 90) return 'text-green-700'
-  if (v >= 70) return 'text-yellow-700'
-  return 'text-red-700'
+  return scoreColor(totalScore.value)
 })
-
-function rowScoreColor(row) {
-  const v = rowAverage(row)
-  if (v >= 90) return 'text-green-700'
-  if (v >= 70) return 'text-yellow-700'
-  return 'text-red-700'
-}
-
-const duplicateAreas = computed(() => {
-  const counts = {}
-  for (const row of form.listado_areas) {
-    if (row.area) counts[row.area] = (counts[row.area] || 0) + 1
-  }
-  return new Set(
-    Object.entries(counts)
-      .filter(([, n]) => n > 1)
-      .map(([name]) => name)
-  )
-})
-
-function isDuplicate(row) {
-  return duplicateAreas.value.has(row.area)
-}
-
-function availableAreasFor(currentIndex) {
-  const selectedElsewhere = new Set()
-  form.listado_areas.forEach((row, i) => {
-    if (i !== currentIndex && row.area) selectedElsewhere.add(row.area)
-  })
-  return (areas.data || []).filter((a) => !selectedElsewhere.has(a.name))
-}
 
 const create = createOLDoc()
 
-async function onSubmit() {
-  if (!form.listado_areas.length) {
-    error.value = 'Agregá al menos un área para inspeccionar.'
-    return
-  }
-  for (const row of form.listado_areas) {
-    if (!row.area) {
-      error.value = 'Selecciona un área en todas las filas.'
-      return
+const { saving, error, onSubmit } = useCreateForm({
+  create,
+  redirect: '/limpieza',
+  validate() {
+    if (!form.listado_areas.length)
+      return 'Agregá al menos un área para inspeccionar.'
+    for (const row of form.listado_areas) {
+      if (!row.area) return 'Selecciona un área en todas las filas.'
     }
-  }
-  if (duplicateAreas.value.size > 0) {
-    error.value =
-      'Hay áreas repetidas en la inspección. Cada área solo puede aparecer una vez.'
-    return
-  }
-  error.value = ''
-  saving.value = true
-  try {
-    await create.submit(form)
-    router.push('/limpieza')
-  } catch (e) {
-    error.value = e.messages?.[0] || e.message || 'Error al guardar.'
-  } finally {
-    saving.value = false
-  }
-}
+    if (duplicateValues.value.size > 0)
+      return 'Hay áreas repetidas en la inspección. Cada área solo puede aparecer una vez.'
+  },
+  buildDoc: () => ({ ...form, listado_areas: serializeRows() }),
+})
 
 addRow()
 </script>

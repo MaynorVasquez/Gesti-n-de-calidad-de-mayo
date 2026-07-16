@@ -7,7 +7,7 @@
     >
       <template #actions>
         <a
-          :href="deskUrl"
+          :href="docUrl"
           target="_blank"
           rel="noopener"
           class="btn-secondary"
@@ -48,13 +48,7 @@
       </template>
     </PageHeader>
 
-    <div
-      v-if="doc.loading && !doc.doc"
-      class="px-4 sm:px-6 lg:px-10 py-16 text-center text-gray-500 text-sm"
-    >
-      <IconLoader class="w-5 h-5 mx-auto animate-spin mb-2" />
-      Cargando…
-    </div>
+    <LoadingCard v-if="doc.loading && !doc.doc" class="m-6 lg:mx-10" />
 
     <div v-else-if="doc.error" class="px-4 sm:px-6 lg:px-10 py-12 text-center">
       <div class="text-red-600 text-sm mb-3">
@@ -73,14 +67,7 @@
       v-else-if="doc.doc"
       class="px-4 sm:px-6 lg:px-10 py-6 max-w-3xl space-y-5"
     >
-      <div class="flex items-center gap-3 flex-wrap">
-        <span class="badge" :class="docstatusClass(doc.doc.docstatus)">
-          <span
-            class="w-1.5 h-1.5 rounded-full"
-            :class="dotClass(doc.doc.docstatus)"
-          />
-          {{ docstatusLabel(doc.doc.docstatus) }}
-        </span>
+      <DocMetaLine :doc="doc.doc">
         <span
           v-if="!editable"
           class="badge"
@@ -88,12 +75,9 @@
         >
           {{ paroStatusLabel(doc.doc.status) }}
         </span>
-        <span class="text-xs text-gray-500">
-          Modificado {{ formatDateTime(doc.doc.modified) }}
-        </span>
-        <span class="text-xs text-gray-400">·</span>
-        <span class="text-xs text-gray-500">por {{ doc.doc.modified_by }}</span>
-      </div>
+      </DocMetaLine>
+
+      <ErrorBanner :message="actionError" />
 
       <section class="card p-5">
         <h3 class="text-sm font-semibold text-gray-900 mb-4">
@@ -168,23 +152,12 @@
         </h3>
         <div
           v-if="doc.doc.comentarios"
-          class="text-sm text-gray-700 prose prose-sm max-w-none"
-          v-html="doc.doc.comentarios"
-        />
+          class="text-sm text-gray-700 whitespace-pre-wrap"
+        >{{ doc.doc.comentarios }}</div>
         <div v-else class="text-sm text-gray-400">Sin comentarios.</div>
       </section>
 
-      <p v-if="!editable" class="text-xs text-gray-500">
-        Para editar este documento, abrí
-        <a
-          :href="deskUrl"
-          target="_blank"
-          rel="noopener"
-          class="text-blue-600 hover:underline"
-        >
-          en Desk </a
-        >.
-      </p>
+      <DeskEditNote v-if="!editable" :href="docUrl" />
     </div>
   </div>
 </template>
@@ -192,16 +165,19 @@
 <script setup>
 import { computed } from 'vue'
 import {
-  useParoDoc,
-  saveParoDoc,
-  submitParoDoc,
-  cancelParoDoc,
+  paroResources,
   PARO_STATUSES,
   paroStatusClass,
   paroStatusLabel,
 } from '@/data/paros'
-import { useConfirm } from '@/composables/confirm'
+import { useDocActions } from '@/composables/docActions'
+import { formatDate, formatTime } from '@/utils/format'
+import { deskUrl } from '@/utils/docstatus'
 import PageHeader from '@/components/PageHeader.vue'
+import LoadingCard from '@/components/LoadingCard.vue'
+import ErrorBanner from '@/components/ErrorBanner.vue'
+import DocMetaLine from '@/components/DocMetaLine.vue'
+import DeskEditNote from '@/components/DeskEditNote.vue'
 import IconCheck from '~icons/lucide/check'
 import IconX from '~icons/lucide/x'
 import IconLoader from '~icons/lucide/loader-circle'
@@ -212,13 +188,21 @@ const props = defineProps({
   name: { type: String, required: true },
 })
 
-const doc = useParoDoc(props.name)
-const saver = saveParoDoc()
-const submitter = submitParoDoc()
-const canceler = cancelParoDoc()
-const confirm = useConfirm()
-
-const editable = computed(() => doc.doc?.docstatus === 0)
+const {
+  doc,
+  saver,
+  submitter,
+  canceler,
+  editable,
+  actionError,
+  onSave,
+  onSubmit,
+  onCancel,
+} = useDocActions({
+  resources: paroResources,
+  name: props.name,
+  entity: { articulo: 'el paro de producción', enviadaLabel: 'enviado' },
+})
 
 const subtitle = computed(() => {
   if (!doc.doc) return 'Cargando…'
@@ -226,92 +210,5 @@ const subtitle = computed(() => {
   return `${producto} · ${formatDate(doc.doc.docdate)} ${formatTime(doc.doc.hora)}`
 })
 
-const deskUrl = computed(
-  () => `/app/qc-paros-de-produccion/${encodeURIComponent(props.name)}`
-)
-
-function docstatusLabel(s) {
-  if (s === 1) return 'Enviado'
-  if (s === 2) return 'Cancelado'
-  return 'Borrador'
-}
-function docstatusClass(s) {
-  if (s === 1) return 'badge-green'
-  if (s === 2) return 'badge-red'
-  return 'badge-yellow'
-}
-function dotClass(s) {
-  if (s === 1) return 'bg-green-500'
-  if (s === 2) return 'bg-red-500'
-  return 'bg-yellow-500'
-}
-function formatDate(d) {
-  if (!d) return '—'
-  const [y, m, day] = String(d).split('-')
-  if (!y || !m || !day) return d
-  return `${day}/${m}/${y}`
-}
-function formatTime(t) {
-  if (!t) return '—'
-  return String(t).slice(0, 5)
-}
-function formatDateTime(s) {
-  if (!s) return ''
-  try {
-    return new Date(s).toLocaleString('es', {
-      dateStyle: 'short',
-      timeStyle: 'short',
-    })
-  } catch {
-    return s
-  }
-}
-
-async function onSave() {
-  try {
-    await saver.submit(doc.doc)
-    await doc.reload()
-  } catch (e) {
-    alert(e.messages?.[0] || e.message || 'Error al guardar.')
-  }
-}
-
-async function onSubmit() {
-  const ok = await confirm({
-    title: '¿Enviar el paro de producción?',
-    message:
-      'Una vez enviado, el documento queda firme y no podrá modificarse después.',
-    confirmText: 'Enviar',
-    cancelText: 'Volver',
-    variant: 'primary',
-  })
-  if (!ok) return
-  try {
-    await submitter.submit(doc.doc)
-    await doc.reload()
-  } catch (e) {
-    alert(e.messages?.[0] || e.message || 'Error al enviar.')
-  }
-}
-
-async function onCancel() {
-  const ok = await confirm({
-    title: '¿Cancelar el paro de producción?',
-    message:
-      'Esta acción no se puede deshacer. El documento quedará marcado como cancelado.',
-    confirmText: 'Sí, cancelar',
-    cancelText: 'Volver',
-    variant: 'danger',
-  })
-  if (!ok) return
-  try {
-    await canceler.submit({
-      doctype: doc.doc.doctype,
-      name: doc.doc.name,
-    })
-    await doc.reload()
-  } catch (e) {
-    alert(e.messages?.[0] || e.message || 'Error al cancelar.')
-  }
-}
+const docUrl = computed(() => deskUrl('qc-paros-de-produccion', props.name))
 </script>
