@@ -32,25 +32,21 @@
         <div class="grid sm:grid-cols-2 gap-4">
           <div class="sm:col-span-2">
             <label class="field-label">Control de calidad del producto</label>
-            <select
+            <SearchSelect
               v-model="form.qc_producto"
+              :options="productos.data || []"
+              :search-fields="['itemname']"
+              :get-label="(p) => `${p.name} · ${p.itemname || 'Sin producto'}`"
               required
-              class="select w-full"
+              :placeholder="
+                productos.list.loading
+                  ? 'Cargando controles abiertos…'
+                  : productos.data?.length
+                    ? 'Buscar por folio o producto…'
+                    : 'No hay controles de calidad en estado Abierto'
+              "
               @change="onProductoChange"
-            >
-              <option value="" disabled>
-                {{
-                  productos.list.loading
-                    ? 'Cargando controles abiertos…'
-                    : productos.data?.length
-                      ? 'Selecciona un control de calidad abierto…'
-                      : 'No hay controles de calidad en estado Abierto'
-                }}
-              </option>
-              <option v-for="p in productos.data || []" :key="p.name" :value="p.name">
-                {{ p.name }} · {{ p.itemname || 'Sin producto' }}
-              </option>
-            </select>
+            />
             <p v-if="form.itemname" class="text-xs text-gray-500 mt-1.5">
               Producto:
               <span class="font-medium text-gray-700">{{ form.itemname }}</span>
@@ -115,6 +111,7 @@ import { useCreateForm } from '@/composables/createForm'
 import { nowDefaults } from '@/utils/format'
 import PageHeader from '@/components/PageHeader.vue'
 import ErrorBanner from '@/components/ErrorBanner.vue'
+import SearchSelect from '@/components/SearchSelect.vue'
 import IconCheck from '~icons/lucide/check'
 import IconLoader from '~icons/lucide/loader-circle'
 
@@ -132,9 +129,8 @@ const form = reactive({
   comentarios: '',
 })
 
-function onProductoChange() {
+function onProductoChange(prod) {
   error.value = ''
-  const prod = (productos.data || []).find((p) => p.name === form.qc_producto)
   form.itemname = prod?.itemname || ''
   form.itemcode = prod?.qc_template || ''
 }
