@@ -35,7 +35,7 @@
             <SearchSelect
               v-model="form.qc_producto"
               :options="productos.data || []"
-              :search-fields="['itemname']"
+              :search-fields="['itemname', 'qc_template']"
               :get-label="(p) => `${p.name} · ${p.itemname || 'Sin producto'}`"
               required
               :placeholder="
