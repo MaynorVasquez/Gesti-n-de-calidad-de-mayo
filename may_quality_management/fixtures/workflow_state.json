@@ -3,6 +3,7 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": null,
+  "modified": "2026-07-22 11:10:34.858414",
   "name": "Borrador",
   "style": "Info",
   "workflow_state_name": "Borrador"
@@ -11,6 +12,7 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": null,
+  "modified": "2026-07-22 11:10:34.872398",
   "name": "Abierto",
   "style": "Primary",
   "workflow_state_name": "Abierto"
@@ -19,6 +21,7 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": null,
+  "modified": "2026-07-22 11:10:34.885293",
   "name": "Cerrado",
   "style": "Success",
   "workflow_state_name": "Cerrado"
@@ -27,6 +30,7 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": null,
+  "modified": "2026-07-22 11:10:34.898337",
   "name": "Cancelado",
   "style": "Danger",
   "workflow_state_name": "Cancelado"

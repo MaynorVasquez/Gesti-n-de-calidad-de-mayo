@@ -2,18 +2,21 @@
  {
   "docstatus": 0,
   "doctype": "Workflow Action Master",
+  "modified": "2026-07-22 11:10:34.799977",
   "name": "Guardar",
   "workflow_action_name": "Guardar"
  },
  {
   "docstatus": 0,
   "doctype": "Workflow Action Master",
+  "modified": "2026-07-22 11:10:34.813684",
   "name": "Cerrar",
   "workflow_action_name": "Cerrar"
  },
  {
   "docstatus": 0,
   "doctype": "Workflow Action Master",
+  "modified": "2026-07-22 11:10:34.826262",
   "name": "Cancelado",
   "workflow_action_name": "Cancelado"
  }
