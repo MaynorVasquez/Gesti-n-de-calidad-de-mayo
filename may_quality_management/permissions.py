@@ -1,6 +1,6 @@
 import frappe
 
-ALLOWED_ROLES = ("Quality Inspector", "System Manager")
+ALLOWED_ROLES = ("Quality Manager", "Usuario de Calidad","System Manager")
 
 
 def has_app_permission():
