@@ -12,7 +12,10 @@ fixtures = [
     {
         "doctype": "Print Format",
         "filters": [
-            ["doc_type", "=", "QC Producto"]
+                ["doc_type", "in", [
+                    "QC Producto",
+                    "QC Inspeccion y Liberacion de Vehiculos"
+                ]]
         ]
     },
     {

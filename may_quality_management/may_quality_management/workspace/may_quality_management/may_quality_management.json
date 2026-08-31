@@ -35,45 +35,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Configuraci\u00f3n",
-   "link_count": 3,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Categorias de control de calidad",
-   "link_count": 0,
-   "link_to": "QC Categoria",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Parametros de control de calidad",
-   "link_count": 0,
-   "link_to": "QC Parametro",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "\u00c1reas de limpieza",
-   "link_count": 0,
-   "link_to": "QC Area de limpieza",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Inispecci\u00f3n de Personal",
    "link_count": 2,
    "link_type": "DocType",
@@ -142,8 +103,57 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Configuraci\u00f3n",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Categorias de control de calidad",
+   "link_count": 0,
+   "link_to": "QC Categoria",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Parametros de control de calidad",
+   "link_count": 0,
+   "link_to": "QC Parametro",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u00c1reas de limpieza",
+   "link_count": 0,
+   "link_to": "QC Area de limpieza",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Parametros Inspecci\u00f3n de vehiculos",
+   "link_count": 0,
+   "link_to": "QC Parametros de inspeccion vehiculos",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Control de Orden y Limpieza",
-   "link_count": 1,
+   "link_count": 2,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -157,9 +167,19 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Inspecci\u00f3n y liberaci\u00f3n de veh\u00edculos",
+   "link_count": 0,
+   "link_to": "QC Inspeccion y Liberacion de Vehiculos",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-07-13 12:16:01.680680",
+ "modified": "2026-08-31 13:50:53.668032",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "May Quality Management",
