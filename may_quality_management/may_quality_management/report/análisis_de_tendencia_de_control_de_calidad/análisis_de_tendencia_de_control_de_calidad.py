@@ -80,7 +80,7 @@ def get_data(filters):
     
     # 2. Construimos la lista de condiciones de forma dinámica
     if filters.get("producto"):
-        conditions.append("T2.qc_template = %(producto)s")
+        conditions.append("T2.qc_template IN %(producto)s")
     
     if filters.get("fecha_inicio"):
         conditions.append("T0.docdate >= %(fecha_inicio)s")
