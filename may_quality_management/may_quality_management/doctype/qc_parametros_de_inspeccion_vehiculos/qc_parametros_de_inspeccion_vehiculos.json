@@ -5,19 +5,43 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "criterio"
+  "criterio",
+  "tipo_parametro",
+  "column_break_fdww",
+  "valor_minimo",
+  "valor_maximo"
  ],
  "fields": [
   {
    "fieldname": "criterio",
    "fieldtype": "Data",
    "label": "Criterio de inspecci\u00f3n"
+  },
+  {
+   "fieldname": "tipo_parametro",
+   "fieldtype": "Select",
+   "label": "Tipo Parametro",
+   "options": "N\u00famero\nSelecci\u00f3n"
+  },
+  {
+   "fieldname": "column_break_fdww",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "valor_minimo",
+   "fieldtype": "Float",
+   "label": "Valor M\u00ednimo"
+  },
+  {
+   "fieldname": "valor_maximo",
+   "fieldtype": "Float",
+   "label": "Valor M\u00e1ximo"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-31 11:42:54.621093",
+ "modified": "2026-10-12 12:15:08.677815",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Parametros de inspeccion vehiculos",
