@@ -28,11 +28,13 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval:doc.tipo_parametro == 'N\u00famero'",
    "fieldname": "valor_minimo",
    "fieldtype": "Float",
    "label": "Valor M\u00ednimo"
   },
   {
+   "depends_on": "eval:doc.tipo_parametro == 'N\u00famero'",
    "fieldname": "valor_maximo",
    "fieldtype": "Float",
    "label": "Valor M\u00e1ximo"
@@ -41,7 +43,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 12:15:08.677815",
+ "modified": "2026-10-12 21:56:34.474325",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Parametros de inspeccion vehiculos",

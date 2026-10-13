@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"VANGkmNrlP\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Gesti\u00f3n de Calidad</b></span>\",\"col\":12}},{\"id\":\"hiNBu0_HIK\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reportes claves</b></span>\",\"col\":12}},{\"id\":\"QMWRrf1HIa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis de Tendencia por formulario\",\"col\":6}},{\"id\":\"qDkxkSOhUD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis tendencia por producto\",\"col\":6}},{\"id\":\"eKzh9r8BqB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis de Inspecci\u00f3n BPM\",\"col\":6}},{\"id\":\"MFM1fXD7eu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis orden y limpieza\",\"col\":6}},{\"id\":\"1X1JxFBDrm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis Lavado de Manos ATP\",\"col\":6}},{\"id\":\"Mp6aqrhjoj\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"LrDVGqE5Fg\",\"type\":\"card\",\"data\":{\"card_name\":\"Control de calidad del producto\",\"col\":5}},{\"id\":\"IlgortiCOy\",\"type\":\"card\",\"data\":{\"card_name\":\"Control de Orden y Limpieza\",\"col\":4}},{\"id\":\"JkbKPaDZeX\",\"type\":\"card\",\"data\":{\"card_name\":\"Inispecci\u00f3n de Personal\",\"col\":4}},{\"id\":\"7W7p4fZoOX\",\"type\":\"card\",\"data\":{\"card_name\":\"Plantilla de formatos\",\"col\":4}},{\"id\":\"x_061FWARF\",\"type\":\"card\",\"data\":{\"card_name\":\"Configuraci\u00f3n\",\"col\":4}}]",
+ "content": "[{\"id\":\"VANGkmNrlP\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Gesti\u00f3n de Calidad</b></span>\",\"col\":12}},{\"id\":\"hiNBu0_HIK\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reportes claves</b></span>\",\"col\":12}},{\"id\":\"QMWRrf1HIa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis de Tendencia por formulario\",\"col\":6}},{\"id\":\"qDkxkSOhUD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis tendencia por producto\",\"col\":6}},{\"id\":\"eKzh9r8BqB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis de Inspecci\u00f3n BPM\",\"col\":6}},{\"id\":\"MFM1fXD7eu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis orden y limpieza\",\"col\":6}},{\"id\":\"1X1JxFBDrm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis Lavado de Manos ATP\",\"col\":6}},{\"id\":\"l1C9udAI-n\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"An\u00e1lisis Inspecci\u00f3n de transportes\",\"col\":3}},{\"id\":\"Mp6aqrhjoj\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"LrDVGqE5Fg\",\"type\":\"card\",\"data\":{\"card_name\":\"Control de calidad del producto\",\"col\":5}},{\"id\":\"IlgortiCOy\",\"type\":\"card\",\"data\":{\"card_name\":\"Control de Orden y Limpieza\",\"col\":4}},{\"id\":\"JkbKPaDZeX\",\"type\":\"card\",\"data\":{\"card_name\":\"Inispecci\u00f3n de Personal\",\"col\":4}},{\"id\":\"7W7p4fZoOX\",\"type\":\"card\",\"data\":{\"card_name\":\"Plantilla de formatos\",\"col\":4}},{\"id\":\"x_061FWARF\",\"type\":\"card\",\"data\":{\"card_name\":\"Configuraci\u00f3n\",\"col\":4}}]",
  "creation": "2026-02-26 17:16:00.933289",
  "custom_blocks": [],
  "docstatus": 0,
@@ -179,7 +179,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-08-31 13:50:53.668032",
+ "modified": "2026-10-13 15:26:46.210479",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "May Quality Management",
@@ -191,6 +191,14 @@
  "roles": [],
  "sequence_id": 39.0,
  "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "An\u00e1lisis Inspecci\u00f3n de transportes",
+   "link_to": "An\u00e1lisis de Inspecci\u00f3n de transporte",
+   "report_ref_doctype": "QC Inspeccion y Liberacion de Vehiculos",
+   "type": "Report"
+  },
   {
    "color": "Grey",
    "doc_view": "List",

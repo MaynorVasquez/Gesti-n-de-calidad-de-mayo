@@ -24,12 +24,12 @@ frappe.ui.form.on('QC Inspeccion y Liberacion detalle', {
         }
     },
 
-    conformidad: function(frm, cdt, cdn) {
+    cumplimiento: function(frm, cdt, cdn) {
         let row = locals[cdt][cdn];
         if (row.tipo_parametro === "Selección") {
-            if (row.conformidad === "Conforme") {
+            if (row.cumplimiento === "Cumple") {
                 row.indicador_vial = "🟢";
-            } else if (row.conformidad === "No Conforme") {
+            } else if (row.cumplimiento === "No Cumple") {
                 row.indicador_vial = "🔴";
             } else {
                 row.indicador_vial = "";

@@ -36,6 +36,11 @@ def get_columns():
         {"label": _("Cumplimiento"), "fieldname": "cumplimiento", "fieldtype": "Data", "width": 250},
         {"label": _("Thermo King"), "fieldname": "thermo_king", "fieldtype": "Data", "width": 250},
         {"label": _("Temperatura Producto"), "fieldname": "temperatura_producto", "fieldtype": "Data", "width": 250},
+        {"label": _("Valor Mínimo"), "fieldname": "valor_minimo", "fieldtype": "Data", "width": 250},
+        {"label": _("Valor Máximo"), "fieldname": "valor_maximo", "fieldtype": "Data", "width": 250},
+        {"label": _("Resultado"), "fieldname": "resultados", "fieldtype": "Data", "width": 250},
+
+
         {"label": _("Observaciones"), "fieldname": "observaciones", "fieldtype": "Data", "width": 250},
         
         
@@ -45,6 +50,8 @@ def get_columns():
         {"label": _("Departamento"), "fieldname": "department", "fieldtype": "Data", "width": 250},
         {"label": _("Estado Empleado"), "fieldname": "status", "fieldtype": "Data", "width": 250},
         {"label": _("Genero"), "fieldname": "gender", "fieldtype": "Data", "width": 250},
+        {"label": _("Indicador"), "fieldname": "indicador_vial", "fieldtype": "Data", "width": 250},
+
     ]
 
 def get_data(filters):
@@ -59,6 +66,12 @@ def get_data(filters):
         
     if filters.get("fecha_fin"):
         conditions.append("T0.fecha <= %(fecha_fin)s")
+
+    if filters.get("parametro"):
+        conditions.append("T1.parametro IN %(parametro)s")
+
+    if filters.get("placa_vehiculo"):
+        conditions.append("T0.vehiculo IN %(placa_vehiculo)s")
     
     # Si agregaste el filtro de 'parametro' que discutimos antes:
     #if filters.get("parametro"):
@@ -89,6 +102,10 @@ def get_data(filters):
             T1.parametro,
             T1.criterio,
             T1.cumplimiento,
+            T1.indicador_vial,
+            T1.valor_minimo,
+            T1.valor_maximo,
+            T1.resultados,
             T1.observaciones,
 			T2.name as 'codigo_empleado',
 			T2.custom_codigo_interno,

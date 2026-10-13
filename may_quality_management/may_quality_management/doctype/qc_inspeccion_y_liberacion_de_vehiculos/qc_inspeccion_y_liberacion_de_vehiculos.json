@@ -61,8 +61,7 @@
    "fieldtype": "Date",
    "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Fecha",
-   "read_only": 1
+   "label": "Fecha"
   },
   {
    "fieldname": "column_break_djhl",
@@ -234,15 +233,17 @@
   {
    "fieldname": "ubicacion",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Ubicaci\u00f3n",
-   "options": "Location"
+   "options": "Location",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-31 15:53:19.991759",
+ "modified": "2026-10-13 12:09:36.255485",
  "modified_by": "Administrator",
  "module": "may_quality_management",
  "name": "QC Inspeccion y Liberacion de Vehiculos",
